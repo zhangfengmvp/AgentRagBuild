@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.3.4</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>com.example</groupId>
+    <artifactId>m1-env-setup</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>m1-env-setup</name>
+    <description>Stage M1: environment setup skeleton (Qdrant + DashScope + Spring Boot)</description>
+
+    <properties>
+        <java.version>17</java.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <!--
+      说明：Spring AI 相关依赖（spring-ai-qdrant-store / spring-ai-alibaba-starter-dashscope）
+      在 M1 阶段并未实际使用（状态页只用 RestClient + 环境变量），且版本需与百炼 SDK 对齐，
+      故统一放到 M2（basic-rag）引入，避免 M1 凭空背负版本冲突、导致编译/启动失败。
+      M2 将使用：org.springframework.ai:spring-ai-qdrant-store-spring-boot-starter:1.0.0-M6
+                 com.alibaba.cloud.ai:spring-ai-alibaba-starter-dashscope:1.0.0.2
+    -->
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>

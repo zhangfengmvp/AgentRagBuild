@@ -1,0 +1,51 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: m2-basic-rag
+  thymeleaf:
+    cache: false
+  ai:
+    dashscope:
+      api-key: ${DASHSCOPE_API_KEY:}
+      # embedding 走百炼【原生 API】（已 curl 验证 qwen3.7-text-embedding-flash 在网关根地址原生端点可用）。
+      # chat 不走这里——本工作空间的 chat 模型只暴露在 OpenAI 兼容端点，见下方 spring.ai.openai。
+      base-url: https://ws-garuvggx9tyw15t4.cn-beijing.maas.aliyuncs.com
+      embedding:
+        options:
+          model: qwen3.7-text-embedding-flash
+    openai:
+      # 百炼 OpenAI 兼容端点：工作空间 chat 模型（qwen3.8-27b 等）仅在此可用，原生接口不认。
+      # 注意：base-url 只需到 /compatible-mode 即可——Spring AI 的 OpenAiApi 会自己再拼 /v1/chat/completions
+      # （已反编译确认 completionsPath 默认 = /v1/chat/completions）。若这里写成 /compatible-mode/v1，
+      # 最终会变成 .../compatible-mode/v1/v1/chat/completions → 404。
+      base-url: https://ws-garuvggx9tyw15t4.cn-beijing.maas.aliyuncs.com/compatible-mode
+      api-key: ${DASHSCOPE_API_KEY:}
+      chat:
+        options:
+          model: qwen3.8-27b
+    vectorstore:
+      qdrant:
+        host: localhost
+        port: 6334          # gRPC 端口（Spring AI 的 Qdrant 客户端走 gRPC/HTTP2）
+        collection-name: java_knowledge
+        # 关闭启动期自动建表：改为入库时（IngestionService.ensureCollection）按需创建。
+        # 好处：即使百炼额度异常/不可用，应用也能正常启动、页面照常打开，错误只在使用时露出。
+        initialize-schema: false
+
+# RAG 管道参数
+rag:
+  corpus-dir: corpus      # 相对运行目录（IDEA 默认 = 本 stage 根目录）
+  qdrant-rest-port: 6333  # 仅用于 /status 状态页探活（REST）；应用连库走 gRPC 6334
+  top-k: 2
+  similarity-threshold: 0.45   # 余弦相似度阈值：只保留“中等以上相关”的片段。越高越严（易召回为空→触发“没检索到”兜底），越低越松（易混入无关片段污染答案）。调参时先拿真实问题看检索 score 反推。
+  chunk:
+    max-chars: 800        # 单切片最大字符数
+    overlap: 120          # 相邻切片重叠字符数
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

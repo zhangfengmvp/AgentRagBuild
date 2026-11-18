@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>M7 · Agent 编排 · Java 技术知识助手</title>
+  <style>
+    :root{
+      --primary:#2563EB; --primary-d:#1D4ED8;
+      --bg:#F8FAFC; --card:#FFFFFF; --line:#E2E8F0;
+      --text:#1E293B; --muted:#475569;
+      --blue:#2563EB; --amber:#D97706; --green:#16A34A; --indigo:#4F46E5; --red:#DC2626;
+      --mono:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:'PingFang SC','Microsoft YaHei',system-ui,sans-serif;
+      background:linear-gradient(180deg,#EEF4FF 0%,var(--bg) 240px);color:var(--text);font-size:14px;line-height:1.6}
+    .app{max-width:1180px;margin:0 auto;padding:24px 20px 64px}
+    /* 顶栏 */
+    .topbar{display:flex;align-items:center;justify-content:space-between;
+      background:linear-gradient(120deg,var(--primary) 0%,var(--indigo) 100%);
+      color:#fff;border-radius:18px;padding:18px 24px;box-shadow:0 10px 30px rgba(37,99,235,.25)}
+    .brand{display:flex;align-items:center;gap:14px}
+    .badge{font-weight:700;font-size:18px;background:rgba(255,255,255,.18);
+      border:1px solid rgba(255,255,255,.35);border-radius:12px;padding:8px 12px;letter-spacing:.5px}
+    .brand h1{margin:0;font-size:20px;font-weight:600}
+    .brand p{margin:2px 0 0;font-size:12px;opacity:.85}
+    nav a{color:#fff;text-decoration:none;margin-left:18px;font-size:13px;opacity:.9;
+      padding:6px 12px;border-radius:10px;transition:.2s}
+    nav a:hover{background:rgba(255,255,255,.18)}
+    /* 提问卡 */
+    .ask-card{background:var(--card);border:1px solid var(--line);border-radius:16px;
+      padding:18px 20px;margin-top:20px;box-shadow:0 4px 14px rgba(15,23,42,.04)}
+    .ask-form{display:flex;gap:10px}
+    .ask-form input{flex:1;border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:14px;outline:none;transition:.2s}
+    .ask-form input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+    .ask-form button{border:0;cursor:pointer;color:#fff;font-weight:600;font-size:14px;
+      background:linear-gradient(120deg,var(--primary),var(--indigo));border-radius:12px;padding:0 22px;transition:.2s}
+    .ask-form button:hover{filter:brightness(1.06);transform:translateY(-1px)}
+    .hint{margin:10px 2px 0;color:var(--muted);font-size:12px}
+    /* 布局 */
+    .layout{display:grid;grid-template-columns:1fr 360px;gap:20px;margin-top:20px}
+    @media(max-width:880px){.layout{grid-template-columns:1fr}}
+    .panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin-bottom:16px;box-shadow:0 4px 14px rgba(15,23,42,.04)}
+    .panel h2,.panel h3{margin:0 0 12px;font-size:15px;font-weight:600}
+    /* 时间线 */
+    .timeline{position:relative;padding-left:26px}
+    .timeline::before{content:"";position:absolute;left:9px;top:6px;bottom:6px;width:2px;background:var(--line)}
+    .node{position:relative;margin-bottom:14px;animation:fade .45s ease both}
+    .node .dot{position:absolute;left:-22px;top:14px;width:14px;height:14px;border-radius:50%;
+      border:3px solid #fff;box-shadow:0 0 0 2px var(--line)}
+    .node-THOUGHT .dot{background:var(--blue)}
+    .node-ACTION .dot{background:var(--amber)}
+    .node-OBSERVATION .dot{background:var(--green)}
+    .node-FINAL .dot{background:var(--indigo)}
+    .card{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--line);
+      border-radius:12px;padding:12px 14px;transition:.2s}
+    .node-THOUGHT .card{border-left-color:var(--blue)}
+    .node-ACTION .card{border-left-color:var(--amber)}
+    .node-OBSERVATION .card{border-left-color:var(--green)}
+    .node-FINAL .card{border-left-color:var(--indigo);background:linear-gradient(180deg,#F5F7FF,#fff)}
+    .card-head{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+    .phase{font-size:11px;font-weight:700;letter-spacing:.6px;color:var(--muted)}
+    .tool-badge{font-size:11px;font-weight:600;color:#fff;background:var(--amber);
+      border-radius:8px;padding:2px 8px;font-family:var(--mono)}
+    .node pre{margin:4px 0 0;white-space:pre-wrap;word-break:break-word;font-family:var(--mono);
+      font-size:12.5px;background:#F1F5F9;border-radius:10px;padding:10px 12px;color:#334155;max-height:320px;overflow:auto}
+    .node-FINAL .answer-body{font-size:14px;white-space:pre-wrap}
+    /* 侧栏 */
+    .answer-body{white-space:pre-wrap;font-size:13.5px;color:var(--text)}
+    .audit ul{list-style:none;margin:0;padding:0}
+    .audit li{display:flex;gap:8px;padding:6px 0;border-bottom:1px dashed var(--line);font-size:13px}
+    .audit li:last-child{border-bottom:0}
+    .idx{color:var(--primary);font-weight:700;font-family:var(--mono)}
+    .muted{color:var(--muted);font-size:12px}
+    .audit-bar p{margin:0;font-size:12.5px;color:var(--muted)}
+    .audit-bar b{color:var(--primary)}
+    .empty{background:var(--card);border:1px dashed var(--line);border-radius:16px;padding:28px;text-align:center;color:var(--muted);margin-top:20px}
+    .legend{display:flex;gap:14px;flex-wrap:wrap;margin:4px 0 14px;font-size:12px;color:var(--muted)}
+    .legend span{display:inline-flex;align-items:center;gap:6px}
+    .legend i{width:10px;height:10px;border-radius:50%;display:inline-block}
+    @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <span class="badge">M7</span>
+        <div>
+          <h1>Agent 编排</h1>
+          <p>ReAct · Tool Calling · 可观测的工具调用轨迹</p>
+        </div>
+      </div>
+      <nav>
+        <a href="/">门户</a>
+        <a href="/ask">问答</a>
+        <a href="/status">状态</a>
+      </nav>
+    </header>
+
+    <section class="ask-card">
+      <form method="post" th:action="@{/agent}" class="ask-form">
+        <input type="text" name="question" th:value="${question}"
+               placeholder="例如：分布式事务如何保证最终一致？" />
+        <button type="submit">运行 Agent</button>
+      </form>
+      <p class="hint">可用工具：<b>knowledgeSearch</b>（Java 技术知识库检索）· <b>codeSnippetSearch</b>（Spring/分布式代码示例）</p>
+    </section>
+
+    <div th:if="${result}" class="layout">
+      <main>
+        <h2 style="margin:0 0 6px;font-size:15px">Agent 轨迹</h2>
+        <div class="legend">
+          <span><i style="background:var(--blue)"></i>思考 THOUGHT</span>
+          <span><i style="background:var(--amber)"></i>行动 ACTION</span>
+          <span><i style="background:var(--green)"></i>观察 OBSERVATION</span>
+          <span><i style="background:var(--indigo)"></i>最终 FINAL</span>
+        </div>
+        <div class="timeline">
+          <div th:each="step : ${result.steps}" class="node" th:classappend="'node-' + ${step.phase}">
+            <span class="dot"></span>
+            <div class="card">
+              <div class="card-head">
+                <span class="phase" th:text="${step.phase}">THOUGHT</span>
+                <span th:if="${step.toolName}" class="tool-badge" th:text="${step.toolName}"></span>
+              </div>
+              <pre th:if="${step.input}" class="code" th:text="${step.input}"></pre>
+              <pre th:if="${step.output}" th:text="${step.output}"></pre>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <aside>
+        <section class="panel answer">
+          <h3>最终答案</h3>
+          <div class="answer-body" th:text="${result.finalAnswer}"></div>
+        </section>
+        <section class="panel audit">
+          <h3>引用溯源</h3>
+          <ul>
+            <li th:each="c : ${result.citations}">
+              <span class="idx" th:text="'[' + ${c.index} + ']'">[1]</span>
+              <span th:text="${c.source} + ' / ' + ${c.heading}"></span>
+            </li>
+          </ul>
+          <p th:if="${#lists.isEmpty(result.citations)}" class="muted">本次未产生引用</p>
+        </section>
+        <section class="panel audit-bar">
+          <h3>工具调用审计</h3>
+          <p>共 <b th:text="${#lists.size(result.steps)}"></b> 步轨迹 · 企业视角：内网系统接入 + 审计留痕</p>
+        </section>
+      </aside>
+    </div>
+
+    <div th:unless="${result}" class="empty">
+      <p>输入一个 Java 技术问题，Agent 会自动拆解并调用工具检索知识库 / 代码示例，最后综合给出带引用的答案。<br>
+         试试：<b>分布式事务如何保证最终一致？</b> 或 <b>Spring 循环依赖怎么解决，给个代码示例</b></p>
+    </div>
+  </div>
+</body>
+</html>

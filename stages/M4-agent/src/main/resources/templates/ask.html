@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>M3 生产级 RAG 管道 · Java 技术知识助手</title>
+    <style>
+        @import url('https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css');
+    </style>
+    <style>
+        :root {
+            --c-rewrite: #8b5cf6;
+            --c-dense: #2563eb;
+            --c-sparse: #16a34a;
+            --c-fused: #7c3aed;
+            --c-rerank: #ea580c;
+            --c-answer: #0f172a;
+        }
+        body {
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            margin: 0; padding: 2rem 1rem; color: #222; line-height: 1.65;
+            background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
+            min-height: 100vh;
+        }
+        .wrap { max-width: 880px; margin: 0 auto; }
+        .hero {
+            background: linear-gradient(135deg, #1d4ed8, #7c3aed);
+            color: #fff; border-radius: 16px; padding: 1.6rem 1.8rem;
+            box-shadow: 0 10px 30px rgba(29,78,216,.25);
+        }
+        .hero h1 { margin: 0 0 .4rem; font-size: 1.5rem; }
+        .hero p { margin: 0; opacity: .9; font-size: .95rem; }
+        textarea {
+            width: 100%; box-sizing: border-box; height: 84px; padding: .7rem .8rem;
+            border: 1px solid #cbd5e1; border-radius: 10px; font-size: 1rem; resize: vertical;
+            font-family: inherit;
+        }
+        textarea:focus { outline: 2px solid #2563eb; border-color: #2563eb; }
+        .btn {
+            margin-top: .7rem; margin-right: .6rem; padding: .55rem 1.3rem; border: 0; border-radius: 9px;
+            cursor: pointer; font-size: 1rem; color: #fff; transition: transform .08s ease, filter .15s ease;
+        }
+        .btn:hover { filter: brightness(1.07); }
+        .btn:active { transform: translateY(1px); }
+        .btn:disabled { opacity: .6; cursor: wait; }
+        .btn-primary { background: linear-gradient(135deg, #2563eb, #1d4ed8); }
+        .btn-gray { background: #475569; }
+        .btn-rewrite { background: var(--c-rewrite); }
+        .stage {
+            border: 1px solid #e2e8f0; border-left-width: 5px; border-radius: 12px;
+            padding: 1rem 1.2rem; margin-top: 1rem; background: #fff;
+            box-shadow: 0 2px 8px rgba(15,23,42,.04);
+        }
+        .stage h3 { margin: 0 0 .6rem; font-size: 1.02rem; display: flex; align-items: center; gap: .5rem; }
+        .stage .badge { font-size: .72rem; padding: .1rem .5rem; border-radius: 999px; color: #fff; }
+        .b-rewrite { border-left-color: var(--c-rewrite); } .b-rewrite .badge { background: var(--c-rewrite); }
+        .b-dense { border-left-color: var(--c-dense); }   .b-dense .badge { background: var(--c-dense); }
+        .b-sparse { border-left-color: var(--c-sparse); } .b-sparse .badge { background: var(--c-sparse); }
+        .b-fused { border-left-color: var(--c-fused); }   .b-fused .badge { background: var(--c-fused); }
+        .b-rerank { border-left-color: var(--c-rerank); } .b-rerank .badge { background: var(--c-rerank); }
+        .b-answer { border-left-color: var(--c-answer); }  .b-answer .badge { background: var(--c-answer); }
+        .hit {
+            border: 1px solid #f1f5f9; border-radius: 9px; padding: .6rem .8rem; margin-top: .55rem; background: #f8fafc;
+        }
+        .hit .meta { font-size: .85rem; color: #475569; display: flex; justify-content: space-between; gap: .5rem; }
+        .hit .src { font-weight: 600; color: #1e293b; }
+        .hit .score { font-variant-numeric: tabular-nums; color: #0f172a; font-weight: 600; }
+        .hit .tag { font-size: .68rem; padding: .05rem .4rem; border-radius: 999px; color:#fff; }
+        .hit .text { margin-top: .45rem; font-size: .9rem; color: #334155; white-space: pre-wrap; display: none; }
+        .hit.open .text { display: block; }
+        .hit .toggle { font-size: .78rem; color: #2563eb; cursor: pointer; user-select: none; }
+        .answer-box { white-space: pre-wrap; font-size: 1rem; color: #0f172a; }
+        .cite { margin-top: .8rem; padding-top: .6rem; border-top: 1px dashed #e2e8f0; font-size: .88rem; color: #475569; }
+        .err { color: #b42318; }
+        .loading { color: #475569; }
+        a { color: #2563eb; }
+        code { background: #f1f5f9; padding: 0 4px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <div class="hero">
+        <h1>M3 · 生产级 RAG 管道</h1>
+        <p>混合检索（稠密 + 本地 BM25）· LLM Query 改写 · 百炼 Rerank · 每一步都看得见。
+            <a href="/status" style="color:#c7d2fe">环境状态页</a></p>
+    </div>
+
+    <div style="margin-top:1.2rem">
+        <textarea id="q" placeholder="例如：Spring 是怎么解决循环依赖的？"></textarea>
+        <button id="askBtn" class="btn btn-primary" onclick="ask()">提问</button>
+        <button class="btn btn-rewrite" onclick="ask(true)">改写后检索</button>
+        <button class="btn btn-gray" onclick="ingest()">（重新）入库语料</button>
+    </div>
+
+    <div id="out"></div>
+</div>
+
+<script>
+    const out = document.getElementById('out');
+    const btn = document.getElementById('askBtn');
+
+    function esc(s) {
+        return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+
+    function hitListHtml(hits, showTag) {
+        if (!hits || !hits.length) return '<div class="meta">（无命中）</div>';
+        return hits.map((h, i) => `
+            <div class="hit">
+                <div class="meta">
+                    <span class="src">[${i + 1}] ${esc(h.source)} # ${esc(h.heading)}</span>
+                    <span class="score">score ${Number(h.score).toFixed(4)}</span>
+                </div>
+                <div><span class="toggle" onclick="this.parentNode.parentNode.classList.toggle('open')">▸ 展开片段</span>
+                    ${showTag && h.origin ? `<span class="tag" style="background:${tagColor(h.origin)}">${esc(h.origin)}</span>` : ''}</div>
+                <div class="text">${esc(h.text)}</div>
+            </div>`).join('');
+    }
+
+    function tagColor(origin) {
+        return { dense: '#2563eb', sparse: '#16a34a', fused: '#7c3aed', rerank: '#ea580c' }[origin] || '#64748b';
+    }
+
+    function stage(cls, title, badge, inner) {
+        return `<div class="stage ${cls}"><h3>${esc(title)} <span class="badge">${esc(badge)}</span></h3>${inner}</div>`;
+    }
+
+    async function ask(forceRewrite) {
+        const q = document.getElementById('q').value.trim();
+        if (!q) { out.innerHTML = '<div class="stage b-answer"><h3>提示</h3><div class="err">请先输入问题。</div></div>'; return; }
+        btn.disabled = true;
+        out.innerHTML = '<div class="stage b-answer"><h3>管道执行中…</h3><div class="loading">改写 → 混合检索 → Rerank → 生成</div></div>';
+        try {
+            const r = await fetch('/api/ask', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ question: q }) });
+            const d = await r.json();
+            if (!r.ok) throw new Error(d.error || ('HTTP ' + r.status));
+            let html = '';
+            if (d.rewrittenQuery && d.rewrittenQuery !== d.originalQuery) {
+                html += stage('b-rewrite', '① Query 改写', 'rewrite',
+                    `<div class="meta"><span>原问题：${esc(d.originalQuery)}</span></div>
+                     <div class="meta"><span class="src">改写后：${esc(d.rewrittenQuery)}</span></div>`);
+            }
+            html += stage('b-dense', '② 稠密检索（Qdrant 向量）', 'dense', hitListHtml(d.denseHits, false));
+            html += stage('b-sparse', '③ 稀疏检索（本地 BM25）', 'sparse', hitListHtml(d.sparseHits, false));
+            html += stage('b-fused', '④ RRF 融合', 'fused', hitListHtml(d.fusedHits, true));
+            html += stage('b-rerank', '⑤ Rerank（qwen3.7-text-rerank）', 'rerank', hitListHtml(d.rerankedHits, false));
+            let cites = '';
+            if (d.citations && d.citations.length) {
+                cites = '<div class="cite"><b>引用来源：</b><ol>' +
+                    d.citations.map(c => `<li>${esc(c.source)} # ${esc(c.heading)}` +
+                        (c.score != null ? `（相关度 ${Number(c.score).toFixed(4)}）` : '') + '</li>').join('') + '</ol></div>';
+            }
+            html += stage('b-answer', '⑥ 最终答案', 'answer', `<div class="answer-box">${esc(d.answer).replace(/\n/g, '<br/>')}</div>${cites}`);
+            out.innerHTML = html;
+        } catch (e) {
+            out.innerHTML = `<div class="stage b-answer"><h3>出错了</h3><div class="err">${esc(String(e.message || e))}<br/>请确认已执行过「入库语料」，且 DASHSCOPE_API_KEY 有效。</div></div>`;
+        }
+        btn.disabled = false;
+    }
+
+    async function ingest() {
+        out.innerHTML = '<div class="stage b-fused"><h3>入库中…</h3><div class="loading">解析 → 切片 → embedding + BM25 → 写入 Qdrant</div></div>';
+        try {
+            const r = await fetch('/api/ingest', { method: 'POST' });
+            const d = await r.json();
+            if (!r.ok) throw new Error(d.error || ('HTTP ' + r.status));
+            out.innerHTML = `<div class="stage b-answer"><h3>入库完成</h3><div>文件 ${d.files} 个，切片 ${d.chunks} 个。</div></div>`;
+        } catch (e) {
+            out.innerHTML = `<div class="stage b-answer"><h3>入库失败</h3><div class="err">${esc(String(e.message || e))}</div></div>`;
+        }
+    }
+</script>
+</body>
+</html>

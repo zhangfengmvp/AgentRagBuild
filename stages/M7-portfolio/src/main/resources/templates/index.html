@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>M7 · Agent RAG Portfolio</title>
+  <link rel="stylesheet" href="/css/portal.css"/>
+</head>
+<body>
+<div class="portal">
+
+  <!-- 顶栏 -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">M7</div>
+      <div>
+        <h1>Agent RAG Portfolio</h1>
+        <p>Spring AI · 自研 RAG / Agent 全链路作品集</p>
+      </div>
+    </div>
+    <nav>
+      <a href="/ask">增强问答</a>
+      <a href="/agent">Agent</a>
+      <a href="/wiki">Wiki</a>
+      <a href="/status">状态</a>
+      <a href="/api/eval/recent">评估</a>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="kicker">Learning Journey · M1 → M7</div>
+    <h2>把 RAG 与 Agent 的每一层，都做成可控、可观测、可演进</h2>
+    <p class="lead">
+      从解析/切片、混合检索与重排，到自主 ReAct、SSE 流式、语义缓存、成本看板、双 RAGAS 评估，
+      再到 LLM Wiki 知识图谱——一个从零自研、可面试、可分享的 Java 技术知识助手。
+    </p>
+    <div class="meta">
+      <span class="pill">Java 17 · Spring Boot 3 · Spring AI</span>
+      <span class="pill">Qdrant · 百炼 DashScope</span>
+      <span class="pill">Thymeleaf · Micrometer</span>
+      <span class="status-chip"><span class="dot"></span>本机 8084 运行中</span>
+    </div>
+  </section>
+
+  <!-- 能力卡片 -->
+  <div class="section-head">
+    <h3>能力总览</h3>
+    <span>点开任一卡片进入对应能力页</span>
+  </div>
+  <section class="grid">
+
+    <a class="card" href="/ask">
+      <span class="tag">M2–M3</span>
+      <div class="ico">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>
+        </svg>
+      </div>
+      <h4>增强问答</h4>
+      <p>混合检索（稠密 + 本地 BM25）→ RRF 融合 → 百炼 Rerank → 生成，每一步管道阶段都可视化。</p>
+      <span class="go">进入问答 →</span>
+    </a>
+
+    <a class="card" href="/agent">
+      <span class="tag">M4</span>
+      <div class="ico">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="4" y="7" width="16" height="12" rx="3"/><path d="M9 3v4M15 3v4M9 13h.01M15 13h.01"/>
+        </svg>
+      </div>
+      <h4>Agent 编排</h4>
+      <p>自主 ReAct + 结构化护栏，工具调用过程可视化；模型幻觉式「谎称已调用」由真实检索兜底。</p>
+      <span class="go">进入编排 →</span>
+    </a>
+
+    <a class="card" href="/stream-agent">
+      <span class="tag">M5</span>
+      <div class="ico">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M13 2L4.5 13.5H11l-1 8.5L19.5 10H13l0-8z"/>
+        </svg>
+      </div>
+      <h4>流式问答</h4>
+      <p>SSE 双实时推送：过程事件即时到达，最终答案按 token 流式输出，兼顾体验与可观测。</p>
+      <span class="go">进入流式 →</span>
+    </a>
+
+    <a class="card" href="/wiki">
+      <span class="tag">M5</span>
+      <div class="ico">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 5a2 2 0 0 1 2-2h11v18H6a2 2 0 0 1-2-2V5z"/><path d="M9 3v18M13 8h4M13 12h4"/>
+        </svg>
+      </div>
+      <h4>LLM Wiki</h4>
+      <p>入库时 LLM 抽取实体/关系构建知识图谱与页面树，重入库增量修订——结构化、互链、可演进。</p>
+      <span class="go">浏览 Wiki →</span>
+    </a>
+
+    <a class="card" href="/api/metrics/cost">
+      <span class="tag">M5</span>
+      <div class="ico">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 19V5M4 19h16"/><path d="M8 16v-4M12 16V8M16 16v-6"/>
+        </svg>
+      </div>
+      <h4>成本看板</h4>
+      <p>按 token×单价累计调用成本，并按管道阶段拆分；以 JSON 暴露，便于接入外部看板。</p>
+      <span class="go">查看成本 →</span>
+    </a>
+
+    <a class="card" href="/api/eval/recent">
+      <span class="tag">M5</span>
+      <div class="ico">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3a9 9 0 1 0 9 9"/><path d="M12 12l4-4"/><path d="M12 3v3"/></svg>
+      </div>
+      <h4>RAGAS 评估</h4>
+      <p>Java 侧 LLM-judge 即时代理分 + Python 真 RAGAS 离线权威评分的双评估体系与历史记录。</p>
+      <span class="go">查看评估 →</span>
+    </a>
+
+    <a class="card" href="/status">
+      <span class="tag">Infra</span>
+      <div class="ico">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 6L9 17l-5-5"/>
+        </svg>
+      </div>
+      <h4>状态自检</h4>
+      <p>Qdrant 连通性、DashScope Key 配置等环境自检，一键确认依赖就绪。</p>
+      <span class="go">环境自检 →</span>
+    </a>
+
+  </section>
+
+  <!-- 文档导览 -->
+  <div class="section-head">
+    <h3>文档导览</h3>
+    <span>面试话术与选型素材</span>
+  </div>
+  <section class="docs">
+    <a class="doc" href="/docs/enterprise-migration.md">
+      <div class="dico">🏢</div>
+      <div>
+        <h4>企业平移说明</h4>
+        <p>语料 / 向量库 / 模型 / Tool 四层解耦，架构可平移企业</p>
+      </div>
+      <span class="arrow">→</span>
+    </a>
+    <a class="doc" href="/docs/platform-compare.md">
+      <div class="dico">⚖️</div>
+      <div>
+        <h4>平台对比</h4>
+        <p>自研 vs 百炼 / Dify / RAGFlow / Milvus + TCO 与决策框架</p>
+      </div>
+      <span class="arrow">→</span>
+    </a>
+  </section>
+
+  <footer class="foot">
+    <span>M7 Portfolio · 以 M5-engineering 为基线整合 M1–M6 能力 · </span>
+    <a href="/actuator/prometheus">/actuator/prometheus</a>
+    <span> · </span>
+    <a href="/status">状态自检</a>
+  </footer>
+
+</div>
+</body>
+</html>

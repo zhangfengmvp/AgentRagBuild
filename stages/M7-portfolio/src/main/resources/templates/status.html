@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>M3 环境状态 · Java 技术知识助手</title>
+    <style>
+        body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; margin: 3rem; color: #222; line-height: 1.6; }
+        h1 { font-size: 1.5rem; }
+        .card { border: 1px solid #e3e3e3; border-radius: 8px; padding: 1rem 1.25rem; max-width: 680px; }
+        .ok { color: #167a45; font-weight: 600; }
+        .no { color: #b42318; font-weight: 600; }
+        code { background: #f4f4f5; padding: 0 4px; border-radius: 4px; }
+        a { color: #2563eb; }
+    </style>
+</head>
+<body>
+<h1>M3 · 环境状态自检</h1>
+<p>Java 技术知识助手 — 阶段 <b>M3 rag-pipeline</b>（混合检索 + Query 改写 + Rerank + 可视化）</p>
+<div class="card">
+    <p>Qdrant 向量库：<code th:text="${qdrantHost} + ':' + ${qdrantPort}"></code>
+       <span th:if="${qdrantReachable}" class="ok">✓ 可达</span>
+       <span th:unless="${qdrantReachable}" class="no">✗ 不可达（请先 <code>docker compose up -d</code>）</span>
+    </p>
+    <p>百炼 DashScope API Key：
+       <span th:if="${dashscopeConfigured}" class="ok">✓ 已配置</span>
+       <span th:unless="${dashscopeConfigured}" class="no">✗ 未配置（IDEA 运行配置的环境变量需设 <code>DASHSCOPE_API_KEY</code>）</span>
+    </p>
+    <p>整体状态：
+       <span th:if="${qdrantReachable and dashscopeConfigured}" class="ok">READY</span>
+       <span th:unless="${qdrantReachable and dashscopeConfigured}" class="no">NOT_READY</span>
+    </p>
+</div>
+<p><a href="/">返回门户</a> · <a href="/ask">增强问答</a></p>
+</body>
+</html>

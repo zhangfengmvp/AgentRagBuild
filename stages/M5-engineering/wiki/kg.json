@@ -1,0 +1,1756 @@
+{
+  "savedAt" : "2026-11-13T07:38:10.415676Z",
+  "nodes" : [ {
+    "name" : "select *",
+    "displayName" : "select *",
+    "type" : "技术",
+    "summary" : "选取表中全部列的查询写法。",
+    "version" : 1,
+    "sources" : [ "database/mysql-index.md#覆盖索引" ],
+    "out" : [ ]
+  }, {
+    "name" : "判断",
+    "displayName" : "判断",
+    "type" : "概念",
+    "summary" : "在 DEL 之后执行并影响结果的操作。",
+    "version" : 1,
+    "sources" : [ "business-scenarios/idempotency.md#面试常见追问" ],
+    "out" : [ {
+      "from" : "判断",
+      "relation" : "影响",
+      "to" : "结果"
+    } ]
+  }, {
+    "name" : "aop",
+    "displayName" : "AOP",
+    "type" : "技术",
+    "summary" : "需要延迟代理创建以避免所有 Bean 被提前代理的关键机制。",
+    "version" : 1,
+    "sources" : [ "spring/circular-dependency.md#为什么需要三级而不是两级" ],
+    "out" : [ {
+      "from" : "aop",
+      "relation" : "要求延迟代理",
+      "to" : "三级缓存"
+    } ]
+  }, {
+    "name" : "最终一致",
+    "displayName" : "最终一致",
+    "type" : "概念",
+    "summary" : "缓存场景通常追求的一致性目标。",
+    "version" : 2,
+    "sources" : [ "distributed/redis-cache-consistency.md#残留问题与对策", "distributed/redis-cache-consistency.md#面试常见追问" ],
+    "out" : [ {
+      "from" : "最终一致",
+      "relation" : "结合",
+      "to" : "短窗口"
+    } ]
+  }, {
+    "name" : "磁盘 io",
+    "displayName" : "磁盘 IO",
+    "type" : "概念",
+    "summary" : "查询过程中访问磁盘的开销，B+ 树通过低层数减少其次数。",
+    "version" : 1,
+    "sources" : [ "database/mysql-index.md#为什么用 B+ 树" ],
+    "out" : [ ]
+  }, {
+    "name" : "短窗口",
+    "displayName" : "短窗口",
+    "type" : "概念",
+    "summary" : "与最终一致结合的短暂不一致时间窗口。",
+    "version" : 1,
+    "sources" : [ "distributed/redis-cache-consistency.md#面试常见追问" ],
+    "out" : [ ]
+  }, {
+    "name" : "性能代价",
+    "displayName" : "性能代价",
+    "type" : "概念",
+    "summary" : "采用分布式锁串行化读写逼近强一致时带来的性能开销。",
+    "version" : 1,
+    "sources" : [ "distributed/redis-cache-consistency.md#面试常见追问" ],
+    "out" : [ ]
+  }, {
+    "name" : "del",
+    "displayName" : "DEL",
+    "type" : "技术",
+    "summary" : "先删后判中先执行的删除操作。",
+    "version" : 1,
+    "sources" : [ "business-scenarios/idempotency.md#面试常见追问" ],
+    "out" : [ ]
+  }, {
+    "name" : "未初始化完成的对象",
+    "displayName" : "未初始化完成的对象",
+    "type" : "概念",
+    "summary" : "指对象初始化未完成的状态，可能被一级缓存暴露并被其他使用者读到。",
+    "version" : 1,
+    "sources" : [ "spring/circular-dependency.md#面试常见追问" ],
+    "out" : [ ]
+  }, {
+    "name" : "objectfactory",
+    "displayName" : "ObjectFactory",
+    "type" : "技术",
+    "summary" : "用于按需生成早期引用（可能是代理对象）的工厂。",
+    "version" : 1,
+    "sources" : [ "spring/circular-dependency.md#三级缓存分别是什么" ],
+    "out" : [ {
+      "from" : "objectfactory",
+      "relation" : "按需生成",
+      "to" : "早期引用"
+    } ]
+  }, {
+    "name" : "redis",
+    "displayName" : "Redis",
+    "type" : "组件",
+    "summary" : "用于通过 setnx/DEL 原子操作完成防重 Token 的校验与删除。",
+    "version" : 1,
+    "sources" : [ "business-scenarios/idempotency.md#常见方案" ],
+    "out" : [ {
+      "from" : "redis",
+      "relation" : "提供",
+      "to" : "setnx/del"
+    } ]
+  }, {
+    "name" : "防重 token",
+    "displayName" : "防重 Token",
+    "type" : "模式",
+    "summary" : "进入页面先领取一次性 token，提交时校验并删除以防止重复提交。",
+    "version" : 1,
+    "sources" : [ "business-scenarios/idempotency.md#常见方案" ],
+    "out" : [ {
+      "from" : "防重 token",
+      "relation" : "实现",
+      "to" : "幂等手段"
+    }, {
+      "from" : "防重 token",
+      "relation" : "使用",
+      "to" : "redis"
+    }, {
+      "from" : "防重 token",
+      "relation" : "使用",
+      "to" : "setnx/del"
+    } ]
+  }, {
+    "name" : "并发",
+    "displayName" : "并发",
+    "type" : "概念",
+    "summary" : "多个请求同时执行并可能产生竞争的场景。",
+    "version" : 1,
+    "sources" : [ "business-scenarios/idempotency.md#面试常见追问" ],
+    "out" : [ {
+      "from" : "并发",
+      "relation" : "导致",
+      "to" : "两个请求都通过校验"
+    } ]
+  }, {
+    "name" : "覆盖索引",
+    "displayName" : "覆盖索引",
+    "type" : "概念",
+    "summary" : "查询所需列全部包含在二级索引中从而无需回表的索引使用形态。",
+    "version" : 1,
+    "sources" : [ "database/mysql-index.md#覆盖索引" ],
+    "out" : [ {
+      "from" : "覆盖索引",
+      "relation" : "依赖",
+      "to" : "二级索引"
+    }, {
+      "from" : "覆盖索引",
+      "relation" : "避免",
+      "to" : "回表"
+    } ]
+  }, {
+    "name" : "连续命中",
+    "displayName" : "连续命中",
+    "type" : "概念",
+    "summary" : "查询条件从最左列开始连续覆盖索引列的状态。",
+    "version" : 1,
+    "sources" : [ "database/mysql-index.md#最左前缀原则" ],
+    "out" : [ {
+      "from" : "连续命中",
+      "relation" : "支持使用",
+      "to" : "联合索引 (a, b, c)"
+    } ]
+  }, {
+    "name" : "两个请求都通过校验",
+    "displayName" : "两个请求都通过校验",
+    "type" : "概念",
+    "summary" : "并发下可能出现的错误校验结果。",
+    "version" : 1,
+    "sources" : [ "business-scenarios/idempotency.md#面试常见追问" ],
+    "out" : [ ]
+  }, {
+    "name" : "索引下推（icp）",
+    "displayName" : "索引下推（ICP）",
+    "type" : "技术",
+    "summary" : "将 where 中可由索引过滤的条件延迟到存储引擎层执行，以减少回表次数。",
+    "version" : 1,
+    "sources" : [ "database/mysql-index.md#面试常见追问" ],
+    "out" : [ {
+      "from" : "索引下推（icp）",
+      "relation" : "将条件下推到",
+      "to" : "存储引擎层"
+    }, {
+      "from" : "索引下推（icp）",
+      "relation" : "利用",
+      "to" : "索引"
+    }, {
+      "from" : "索引下推（icp）",
+      "relation" : "获取条件自",
+      "to" : "where"
+    }, {
+      "from" : "索引下推（icp）",
+      "relation" : "减少",
+      "to" : "回表次数"
+    } ]
+  }, {
+    "name" : "更新数据库",
+    "displayName" : "更新数据库",
+    "type" : "技术",
+    "summary" : "写操作中先于删除缓存执行的数据持久化步骤。",
+    "version" : 1,
+    "sources" : [ "distributed/redis-cache-consistency.md#Cache Aside 模式" ],
+    "out" : [ {
+      "from" : "更新数据库",
+      "relation" : "先于",
+      "to" : "删除缓存"
+    } ]
+  }, {
+    "name" : "单例 bean",
+    "displayName" : "单例 Bean",
+    "type" : "组件",
+    "summary" : "具有单例特性的 Bean。",
+    "version" : 1,
+    "sources" : [ "spring/circular-dependency.md#什么是循环依赖" ],
+    "out" : [ {
+      "from" : "单例 bean",
+      "relation" : "是一种",
+      "to" : "bean"
+    } ]
+  }, {
+    "name" : "过期时间",
+    "displayName" : "过期时间",
+    "type" : "概念",
+    "summary" : "在可接受微小不一致时用于兜底的缓存过期机制。",
+    "version" : 1,
+    "sources" : [ "distributed/redis-cache-consistency.md#残留问题与对策" ],
+    "out" : [ ]
+  }, {
+    "name" : "二级缓存",
+    "displayName" : "二级缓存",
+    "type" : "概念",
+    "summary" : "存放通过 getEarlyBeanReference 提前生成的代理对象。",
+    "version" : 2,
+    "sources" : [ "spring/circular-dependency.md#三级缓存分别是什么", "spring/circular-dependency.md#为什么需要三级而不是两级" ],
+    "out" : [ {
+      "from" : "二级缓存",
+      "relation" : "对应",
+      "to" : "earlysingletonobjects"
+    }, {
+      "from" : "二级缓存",
+      "relation" : "存储",
+      "to" : "半成品 bean"
+    } ]
+  }, {
+    "name" : "代理语义",
+    "displayName" : "代理语义",
+    "type" : "概念",
+    "summary" : "代理只在必要时介入的语义约束。",
+    "version" : 1,
+    "sources" : [ "spring/circular-dependency.md#为什么需要三级而不是两级" ],
+    "out" : [ ]
+  }, {
+    "name" : "结果",
+    "displayName" : "结果",
+    "type" : "概念",
+    "summary" : "先删后判中由判断影响的最终处理结果。",
+    "version" : 1,
+    "sources" : [ "business-scenarios/idempotency.md#面试常见追问" ],
+    "out" : [ ]
+  }, {
+    "name" : "先删缓存再更新库",
+    "displayName" : "先删缓存再更新库",
+    "type" : "模式",
+    "summary" : "先删除缓存再更新库的一种缓存一致性策略。",
+    "version" : 1,
+    "sources" : [ "distributed/redis-cache-consistency.md#为什么是\"先库后删缓存\"" ],
+    "out" : [ {
+      "from" : "先删缓存再更新库",
+      "relation" : "先执行",
+      "to" : "删缓存"
+    }, {
+      "from" : "先删缓存再更新库",
+      "relation" : "后执行",
+      "to" : "更新库"
+    }, {
+      "from" : "先删缓存再更新库",
+      "relation" : "产生",
+      "to" : "窗口期"
+    }, {
+      "from" : "先删缓存再更新库",
+      "relation" : "导致",
+      "to" : "长时间不一致"
+    } ]
+  }, {
+    "name" : "半成品 bean",
+    "displayName" : "半成品 Bean",
+    "type" : "概念",
+    "summary" : "已实例化、未完成属性填充的提前曝光 Bean。",
+    "version" : 1,
+    "sources" : [ "spring/circular-dependency.md#三级缓存分别是什么" ],
+    "out" : [ {
+      "from" : "半成品 bean",
+      "relation" : "属于",
+      "to" : "bean"
+    } ]
+  }, {
+    "name" : "范围查询后的列",
+    "displayName" : "范围查询后的列",
+    "type" : "概念",
+    "summary" : "在联合索引中位于范围查询之后的列。",
+    "version" : 1,
+    "sources" : [ "database/mysql-index.md#最左前缀原则" ],
+    "out" : [ {
+      "from" : "范围查询后的列",
+      "relation" : "停止使用",
+      "to" : "索引排序能力"
+    } ]
+  }, {
+    "name" : "转账",
+    "displayName" : "转账",
+    "type" : "概念",
+    "summary" : "一种涉及资金变动的写操作。",
+    "version" : 1,
+    "sources" : [ "business-scenarios/idempotency.md#为什么需要幂等" ],
+    "out" : [ {
+      "from" : "转账",
+      "relation" : "属于",
+      "to" : "写操作"
+    } ]
+  }, {
+    "name" : "联合索引 (a, b, c)",
+    "displayName" : "联合索引 (a, b, c)",
+    "type" : "组件",
+    "summary" : "相当于按 a、(a,b)、(a,b,c) 排序的索引。",
+    "version" : 1,
+    "sources" : [ "database/mysql-index.md#最左前缀原则" ],
+    "out" : [ {
+      "from" : "联合索引 (a, b, c)",
+      "relation" : "提供",
+      "to" : "索引排序能力"
+    } ]
+  }, {
+    "name" : "状态机",
+    "displayName" : "状态机",
+    "type" : "模式",
+    "summary" : "用于约束和驱动状态流转类业务的模式。",
+    "version" : 2,
+    "sources" : [ "business-scenarios/idempotency.md#常见方案", "business-scenarios/idempotency.md#选型思路" ],
+    "out" : [ {
+      "from" : "状态机",
+      "relation" : "实现",
+      "to" : "幂等手段"
+    }, {
+      "from" : "状态机",
+      "relation" : "依据",
+      "to" : "影响行数"
+    } ]
+  }, {
+    "name" : "工厂",
+    "displayName" : "工厂",
+    "type" : "组件",
+    "summary" : "在循环依赖被提前索取时调用 getEarlyBeanReference 的组件。",
+    "version" : 1,
+    "sources" : [ "spring/circular-dependency.md#为什么需要三级而不是两级" ],
+    "out" : [ {
+      "from" : "工厂",
+      "relation" : "调用",
+      "to" : "getearlybeanreference"
+    } ]
+  }, {
+    "name" : "链表",
+    "displayName" : "链表",
+    "type" : "技术",
+    "summary" : "有序插入导致二叉树退化后形成的低效结构。",
+    "version" : 1,
+    "sources" : [ "database/mysql-index.md#为什么用 B+ 树" ],
+    "out" : [ ]
+  }, {
+    "name" : "旧值",
+    "displayName" : "旧值",
+    "type" : "概念",
+    "summary" : "更新前被读请求重新载入缓存的过期数据。",
+    "version" : 1,
+    "sources" : [ "distributed/redis-cache-consistency.md#为什么是\"先库后删缓存\"" ],
+    "out" : [ {
+      "from" : "旧值",
+      "relation" : "被重新载入缓存",
+      "to" : "缓存"
+    } ]
+  }, {
+    "name" : "索引",
+    "displayName" : "索引",
+    "type" : "组件",
+    "summary" : "用于在存储引擎层过滤查询条件的数据库结构。",
+    "version" : 1,
+    "sources" : [ "database/mysql-index.md#面试常见追问" ],
+    "out" : [ ]
+  }, {
+    "name" : "用户重复点击",
+    "displayName" : "用户重复点击",
+    "type" : "概念",
+    "summary" : "用户多次点击提交，可能导致同一请求到达多次。",
+    "version" : 1,
+    "sources" : [ "business-scenarios/idempotency.md#为什么需要幂等" ],
+    "out" : [ {
+      "from" : "用户重复点击",
+      "relation" : "产生",
+      "to" : "同一请求"
+    } ]
+  }, {
+    "name" : "半成品",
+    "displayName" : "半成品",
+    "type" : "概念",
+    "summary" : "指尚未初始化完成的对象，在只有一级缓存时可能被当成成品暴露。",
+    "version" : 1,
+    "sources" : [ "spring/circular-dependency.md#面试常见追问" ],
+    "out" : [ {
+      "from" : "半成品",
+      "relation" : "被当成",
+      "to" : "成品"
+    } ]
+  }, {
+    "name" : "回表",
+    "displayName" : "回表",
+    "type" : "概念",
+    "summary" : "查询未完全被二级索引覆盖时需要执行的额外取数过程。",
+    "version" : 2,
+    "sources" : [ "database/mysql-index.md#聚簇索引与回表", "database/mysql-index.md#覆盖索引" ],
+    "out" : [ {
+      "from" : "回表",
+      "relation" : "使用",
+      "to" : "主键值"
+    }, {
+      "from" : "回表",
+      "relation" : "再查",
+      "to" : "聚簇索引"
+    } ]
+  }, {
+    "name" : "数据库唯一索引",
+    "displayName" : "数据库唯一索引",
+    "type" : "技术",
+    "summary" : "以业务单号建唯一键，重复插入直接失败，用于实现幂等。",
+    "version" : 1,
+    "sources" : [ "business-scenarios/idempotency.md#常见方案" ],
+    "out" : [ {
+      "from" : "数据库唯一索引",
+      "relation" : "基于",
+      "to" : "业务单号"
+    }, {
+      "from" : "数据库唯一索引",
+      "relation" : "实现",
+      "to" : "幂等手段"
+    } ]
+  }, {
+    "name" : "校验+占位",
+    "displayName" : "校验+占位",
+    "type" : "概念",
+    "summary" : "token 方案中被合并为一次原子操作的校验与占位步骤。",
+    "version" : 1,
+    "sources" : [ "business-scenarios/idempotency.md#面试常见追问" ],
+    "out" : [ {
+      "from" : "校验+占位",
+      "relation" : "合并成",
+      "to" : "原子操作"
+    } ]
+  }, {
+    "name" : "读写并发",
+    "displayName" : "读写并发",
+    "type" : "概念",
+    "summary" : "读操作和写操作同时发生并可能引发缓存不一致的场景。",
+    "version" : 1,
+    "sources" : [ "distributed/redis-cache-consistency.md#残留问题与对策" ],
+    "out" : [ {
+      "from" : "读写并发",
+      "relation" : "导致",
+      "to" : "微小不一致"
+    } ]
+  }, {
+    "name" : "查询条件",
+    "displayName" : "查询条件",
+    "type" : "概念",
+    "summary" : "必须从最左列开始连续命中才能使用联合索引的条件。",
+    "version" : 1,
+    "sources" : [ "database/mysql-index.md#最左前缀原则" ],
+    "out" : [ {
+      "from" : "查询条件",
+      "relation" : "必须从",
+      "to" : "最左列"
+    }, {
+      "from" : "查询条件",
+      "relation" : "需要",
+      "to" : "连续命中"
+    } ]
+  }, {
+    "name" : "先更新库再删缓存",
+    "displayName" : "先更新库再删缓存",
+    "type" : "模式",
+    "summary" : "先更新库再删除缓存的一种缓存一致性策略。",
+    "version" : 1,
+    "sources" : [ "distributed/redis-cache-consistency.md#为什么是\"先库后删缓存\"" ],
+    "out" : [ {
+      "from" : "先更新库再删缓存",
+      "relation" : "先执行",
+      "to" : "更新库"
+    }, {
+      "from" : "先更新库再删缓存",
+      "relation" : "后执行",
+      "to" : "删缓存"
+    }, {
+      "from" : "先更新库再删缓存",
+      "relation" : "减小",
+      "to" : "不一致窗口"
+    }, {
+      "from" : "先更新库再删缓存",
+      "relation" : "优于",
+      "to" : "先删缓存再更新库"
+    } ]
+  }, {
+    "name" : "唯一索引",
+    "displayName" : "唯一索引",
+    "type" : "技术",
+    "summary" : "用于优先保障具有天然业务单号场景下唯一性的数据库索引技术。",
+    "version" : 1,
+    "sources" : [ "business-scenarios/idempotency.md#选型思路" ],
+    "out" : [ {
+      "from" : "唯一索引",
+      "relation" : "保障",
+      "to" : "唯一键"
+    } ]
+  }, {
+    "name" : "前端交互类提交",
+    "displayName" : "前端交互类提交",
+    "type" : "概念",
+    "summary" : "由前端交互产生的提交场景，需要采用 token 方案。",
+    "version" : 1,
+    "sources" : [ "business-scenarios/idempotency.md#选型思路" ],
+    "out" : [ {
+      "from" : "前端交互类提交",
+      "relation" : "采用",
+      "to" : "token"
+    } ]
+  }, {
+    "name" : "幂等",
+    "displayName" : "幂等",
+    "type" : "概念",
+    "summary" : "使同一请求多次执行后系统状态与执行一次一致的特性。",
+    "version" : 1,
+    "sources" : [ "business-scenarios/idempotency.md#为什么需要幂等" ],
+    "out" : [ {
+      "from" : "幂等",
+      "relation" : "避免",
+      "to" : "资金或数据错乱"
+    } ]
+  }, {
+    "name" : "避免 select *",
+    "displayName" : "避免 select *",
+    "type" : "模式",
+    "summary" : "通过避免选取全部列来降低查询列范围的模式。",
+    "version" : 1,
+    "sources" : [ "database/mysql-index.md#覆盖索引" ],
+    "out" : [ {
+      "from" : "避免 select *",
+      "relation" : "支撑",
+      "to" : "覆盖索引"
+    }, {
+      "from" : "避免 select *",
+      "relation" : "规避",
+      "to" : "select *"
+    } ]
+  }, {
+    "name" : "范围查询",
+    "displayName" : "范围查询",
+    "type" : "概念",
+    "summary" : "会导致其后的列停止使用索引排序能力的查询类型。",
+    "version" : 2,
+    "sources" : [ "database/mysql-index.md#为什么用 B+ 树", "database/mysql-index.md#最左前缀原则" ],
+    "out" : [ {
+      "from" : "范围查询",
+      "relation" : "界定",
+      "to" : "范围查询后的列"
+    } ]
+  }, {
+    "name" : "prototype 作用域",
+    "displayName" : "prototype 作用域",
+    "type" : "概念",
+    "summary" : "文中指出不支持，Spring 直接抛异常。",
+    "version" : 1,
+    "sources" : [ "spring/circular-dependency.md#解决不了的情况" ],
+    "out" : [ {
+      "from" : "prototype 作用域",
+      "relation" : "不支持",
+      "to" : "循环依赖"
+    }, {
+      "from" : "prototype 作用域",
+      "relation" : "触发",
+      "to" : "异常"
+    } ]
+  }, {
+    "name" : "微小不一致",
+    "displayName" : "微小不一致",
+    "type" : "概念",
+    "summary" : "读写并发下产生的短暂且可能可接受或不可接受的不一致。",
+    "version" : 1,
+    "sources" : [ "distributed/redis-cache-consistency.md#残留问题与对策" ],
+    "out" : [ {
+      "from" : "微小不一致",
+      "relation" : "可接受时采用",
+      "to" : "过期时间"
+    }, {
+      "from" : "微小不一致",
+      "relation" : "不可接受时采用",
+      "to" : "延迟双删"
+    } ]
+  }, {
+    "name" : "更新库",
+    "displayName" : "更新库",
+    "type" : "技术",
+    "summary" : "更新库中数据以使其成为最新数据的操作。",
+    "version" : 1,
+    "sources" : [ "distributed/redis-cache-consistency.md#为什么是\"先库后删缓存\"" ],
+    "out" : [ {
+      "from" : "更新库",
+      "relation" : "更新",
+      "to" : "库"
+    } ]
+  }, {
+    "name" : "where",
+    "displayName" : "where",
+    "type" : "概念",
+    "summary" : "查询条件子句，提供可由索引过滤的条件。",
+    "version" : 1,
+    "sources" : [ "database/mysql-index.md#面试常见追问" ],
+    "out" : [ ]
+  }, {
+    "name" : "选型思路",
+    "displayName" : "选型思路",
+    "type" : "概念",
+    "summary" : "按业务场景选择唯一性约束方案的整体思路。",
+    "version" : 1,
+    "sources" : [ "business-scenarios/idempotency.md#选型思路" ],
+    "out" : [ {
+      "from" : "选型思路",
+      "relation" : "指导",
+      "to" : "唯一索引"
+    }, {
+      "from" : "选型思路",
+      "relation" : "指导",
+      "to" : "token"
+    }, {
+      "from" : "选型思路",
+      "relation" : "指导",
+      "to" : "状态机"
+    } ]
+  }, {
+    "name" : "canal",
+    "displayName" : "Canal",
+    "type" : "组件",
+    "summary" : "用于订阅 binlog 并实现异步删缓存的组件。",
+    "version" : 1,
+    "sources" : [ "distributed/redis-cache-consistency.md#残留问题与对策" ],
+    "out" : [ {
+      "from" : "canal",
+      "relation" : "订阅",
+      "to" : "binlog"
+    }, {
+      "from" : "canal",
+      "relation" : "用于",
+      "to" : "异步删缓存"
+    } ]
+  }, {
+    "name" : "网络重试",
+    "displayName" : "网络重试",
+    "type" : "概念",
+    "summary" : "网络异常后重新发送请求，可能导致同一请求到达多次。",
+    "version" : 1,
+    "sources" : [ "business-scenarios/idempotency.md#为什么需要幂等" ],
+    "out" : [ {
+      "from" : "网络重试",
+      "relation" : "产生",
+      "to" : "同一请求"
+    } ]
+  }, {
+    "name" : "a",
+    "displayName" : "A",
+    "type" : "组件",
+    "summary" : "示例中创建时需要注入 B 的 Bean。",
+    "version" : 1,
+    "sources" : [ "spring/circular-dependency.md#什么是循环依赖" ],
+    "out" : [ {
+      "from" : "a",
+      "relation" : "需要注入",
+      "to" : "b"
+    }, {
+      "from" : "a",
+      "relation" : "形成",
+      "to" : "循环依赖"
+    } ]
+  }, {
+    "name" : "二三级配合",
+    "displayName" : "二三级配合",
+    "type" : "模式",
+    "summary" : "与一级缓存配合，用于区分成品和提前曝光的早期引用。",
+    "version" : 1,
+    "sources" : [ "spring/circular-dependency.md#面试常见追问" ],
+    "out" : [ {
+      "from" : "二三级配合",
+      "relation" : "区分",
+      "to" : "成品"
+    }, {
+      "from" : "二三级配合",
+      "relation" : "区分",
+      "to" : "早期引用"
+    } ]
+  }, {
+    "name" : "b",
+    "displayName" : "B",
+    "type" : "组件",
+    "summary" : "示例中创建时需要注入 A 的 Bean。",
+    "version" : 1,
+    "sources" : [ "spring/circular-dependency.md#什么是循环依赖" ],
+    "out" : [ {
+      "from" : "b",
+      "relation" : "需要注入",
+      "to" : "a"
+    }, {
+      "from" : "b",
+      "relation" : "形成",
+      "to" : "循环依赖"
+    } ]
+  }, {
+    "name" : "按需建联合索引",
+    "displayName" : "按需建联合索引",
+    "type" : "模式",
+    "summary" : "根据查询列按需设计并建立联合索引的模式。",
+    "version" : 1,
+    "sources" : [ "database/mysql-index.md#覆盖索引" ],
+    "out" : [ {
+      "from" : "按需建联合索引",
+      "relation" : "构建",
+      "to" : "联合索引"
+    }, {
+      "from" : "按需建联合索引",
+      "relation" : "支撑",
+      "to" : "覆盖索引"
+    } ]
+  }, {
+    "name" : "setnx/del",
+    "displayName" : "setnx/DEL",
+    "type" : "技术",
+    "summary" : "Redis 中原子完成 token 校验并删除的操作组合。",
+    "version" : 1,
+    "sources" : [ "business-scenarios/idempotency.md#常见方案" ],
+    "out" : [ ]
+  }, {
+    "name" : "循环依赖",
+    "displayName" : "循环依赖",
+    "type" : "概念",
+    "summary" : "文中作为构造器注入和 prototype 作用域无法支持的问题出现。",
+    "version" : 3,
+    "sources" : [ "spring/circular-dependency.md#什么是循环依赖", "spring/circular-dependency.md#为什么需要三级而不是两级", "spring/circular-dependency.md#解决不了的情况" ],
+    "out" : [ {
+      "from" : "循环依赖",
+      "relation" : "导致",
+      "to" : "死锁"
+    }, {
+      "from" : "循环依赖",
+      "relation" : "触发",
+      "to" : "getearlybeanreference"
+    } ]
+  }, {
+    "name" : "状态流转类",
+    "displayName" : "状态流转类",
+    "type" : "概念",
+    "summary" : "业务状态需要按规则流转的场景，适合采用状态机。",
+    "version" : 1,
+    "sources" : [ "business-scenarios/idempotency.md#选型思路" ],
+    "out" : [ {
+      "from" : "状态流转类",
+      "relation" : "采用",
+      "to" : "状态机"
+    } ]
+  }, {
+    "name" : "回填缓存",
+    "displayName" : "回填缓存",
+    "type" : "技术",
+    "summary" : "缓存未命中时从数据库读取数据并写入缓存的操作。",
+    "version" : 1,
+    "sources" : [ "distributed/redis-cache-consistency.md#Cache Aside 模式" ],
+    "out" : [ ]
+  }, {
+    "name" : "早期引用",
+    "displayName" : "早期引用",
+    "type" : "概念",
+    "summary" : "指被提前曝光的、尚未初始化完成的对象引用。",
+    "version" : 2,
+    "sources" : [ "spring/circular-dependency.md#三级缓存分别是什么", "spring/circular-dependency.md#面试常见追问" ],
+    "out" : [ {
+      "from" : "早期引用",
+      "relation" : "可能是",
+      "to" : "代理对象"
+    }, {
+      "from" : "早期引用",
+      "relation" : "指向",
+      "to" : "未初始化完成的对象"
+    } ]
+  }, {
+    "name" : "延迟双删",
+    "displayName" : "延迟双删",
+    "type" : "模式",
+    "summary" : "在写后延迟几百毫秒再删除一次缓存以处理不可接受微小不一致的模式。",
+    "version" : 1,
+    "sources" : [ "distributed/redis-cache-consistency.md#残留问题与对策" ],
+    "out" : [ {
+      "from" : "延迟双删",
+      "relation" : "处理",
+      "to" : "微小不一致"
+    } ]
+  }, {
+    "name" : "token",
+    "displayName" : "token",
+    "type" : "技术",
+    "summary" : "用于前端交互类提交场景的唯一性标识或防重手段。",
+    "version" : 1,
+    "sources" : [ "business-scenarios/idempotency.md#选型思路" ],
+    "out" : [ {
+      "from" : "token",
+      "relation" : "保障",
+      "to" : "唯一键"
+    } ]
+  }, {
+    "name" : "删除缓存",
+    "displayName" : "删除缓存",
+    "type" : "技术",
+    "summary" : "写操作在更新数据库后执行的缓存失效操作。",
+    "version" : 1,
+    "sources" : [ "distributed/redis-cache-consistency.md#Cache Aside 模式" ],
+    "out" : [ {
+      "from" : "删除缓存",
+      "relation" : "替代",
+      "to" : "更新缓存"
+    }, {
+      "from" : "删除缓存",
+      "relation" : "应对",
+      "to" : "并发写"
+    }, {
+      "from" : "删除缓存",
+      "relation" : "体现",
+      "to" : "惰性加载"
+    }, {
+      "from" : "删除缓存",
+      "relation" : "适用于",
+      "to" : "写多读少场景"
+    } ]
+  }, {
+    "name" : "主键值",
+    "displayName" : "主键值",
+    "type" : "概念",
+    "summary" : "二级索引叶子节点中存储的值，用于回到聚簇索引查询。",
+    "version" : 1,
+    "sources" : [ "database/mysql-index.md#聚簇索引与回表" ],
+    "out" : [ ]
+  }, {
+    "name" : "token 方案",
+    "displayName" : "token 方案",
+    "type" : "技术",
+    "summary" : "一种通过先删后判将校验+占位合并为一次原子操作，以避免并发下两个请求都通过校验的方案。",
+    "version" : 1,
+    "sources" : [ "business-scenarios/idempotency.md#面试常见追问" ],
+    "out" : [ {
+      "from" : "token 方案",
+      "relation" : "采用",
+      "to" : "先删后判"
+    }, {
+      "from" : "token 方案",
+      "relation" : "合并",
+      "to" : "校验+占位"
+    } ]
+  }, {
+    "name" : "最左前缀原则",
+    "displayName" : "最左前缀原则",
+    "type" : "概念",
+    "summary" : "查询条件必须从最左列开始连续命中才能有效使用联合索引的规则。",
+    "version" : 1,
+    "sources" : [ "database/mysql-index.md#最左前缀原则" ],
+    "out" : [ {
+      "from" : "最左前缀原则",
+      "relation" : "适用于",
+      "to" : "联合索引 (a, b, c)"
+    }, {
+      "from" : "最左前缀原则",
+      "relation" : "约束",
+      "to" : "查询条件"
+    } ]
+  }, {
+    "name" : "读请求",
+    "displayName" : "读请求",
+    "type" : "概念",
+    "summary" : "在窗口期内读取数据并可能触发缓存重新载入的请求。",
+    "version" : 1,
+    "sources" : [ "distributed/redis-cache-consistency.md#为什么是\"先库后删缓存\"" ],
+    "out" : [ {
+      "from" : "读请求",
+      "relation" : "触发",
+      "to" : "重新载入缓存"
+    } ]
+  }, {
+    "name" : "整行数据",
+    "displayName" : "整行数据",
+    "type" : "概念",
+    "summary" : "聚簇索引叶子节点中存储的完整行记录数据。",
+    "version" : 1,
+    "sources" : [ "database/mysql-index.md#聚簇索引与回表" ],
+    "out" : [ ]
+  }, {
+    "name" : "异常",
+    "displayName" : "异常",
+    "type" : "概念",
+    "summary" : "文中指出 Spring 直接抛出的结果。",
+    "version" : 1,
+    "sources" : [ "spring/circular-dependency.md#解决不了的情况" ],
+    "out" : [ ]
+  }, {
+    "name" : "最左列",
+    "displayName" : "最左列",
+    "type" : "概念",
+    "summary" : "联合索引中查询条件必须开始命中的左侧列。",
+    "version" : 1,
+    "sources" : [ "database/mysql-index.md#最左前缀原则" ],
+    "out" : [ ]
+  }, {
+    "name" : "叶子节点",
+    "displayName" : "叶子节点",
+    "type" : "组件",
+    "summary" : "索引结构中存储数据的节点，在聚簇索引和二级索引中承载不同内容。",
+    "version" : 2,
+    "sources" : [ "database/mysql-index.md#为什么用 B+ 树", "database/mysql-index.md#聚簇索引与回表" ],
+    "out" : [ {
+      "from" : "叶子节点",
+      "relation" : "使用",
+      "to" : "双向链表"
+    }, {
+      "from" : "叶子节点",
+      "relation" : "在聚簇索引中存",
+      "to" : "整行数据"
+    }, {
+      "from" : "叶子节点",
+      "relation" : "在二级索引中存",
+      "to" : "主键值"
+    } ]
+  }, {
+    "name" : "删缓存",
+    "displayName" : "删缓存",
+    "type" : "技术",
+    "summary" : "删除缓存中数据以促使后续读请求重新加载的操作。",
+    "version" : 1,
+    "sources" : [ "distributed/redis-cache-consistency.md#为什么是\"先库后删缓存\"" ],
+    "out" : [ {
+      "from" : "删缓存",
+      "relation" : "删除",
+      "to" : "缓存"
+    } ]
+  }, {
+    "name" : "三级缓存",
+    "displayName" : "三级缓存",
+    "type" : "概念",
+    "summary" : "延迟代理对象创建，只在循环依赖且被提前索取时介入。",
+    "version" : 2,
+    "sources" : [ "spring/circular-dependency.md#三级缓存分别是什么", "spring/circular-dependency.md#为什么需要三级而不是两级" ],
+    "out" : [ {
+      "from" : "三级缓存",
+      "relation" : "对应",
+      "to" : "singletonfactories"
+    }, {
+      "from" : "三级缓存",
+      "relation" : "存储",
+      "to" : "objectfactory"
+    }, {
+      "from" : "三级缓存",
+      "relation" : "延迟创建",
+      "to" : "代理对象"
+    }, {
+      "from" : "三级缓存",
+      "relation" : "避免提前代理",
+      "to" : "bean"
+    } ]
+  }, {
+    "name" : "业务单号",
+    "displayName" : "业务单号",
+    "type" : "概念",
+    "summary" : "业务中天然存在的单据编号，可作为唯一性依据。",
+    "version" : 2,
+    "sources" : [ "business-scenarios/idempotency.md#常见方案", "business-scenarios/idempotency.md#选型思路" ],
+    "out" : [ {
+      "from" : "业务单号",
+      "relation" : "优先采用",
+      "to" : "唯一索引"
+    }, {
+      "from" : "业务单号",
+      "relation" : "作为",
+      "to" : "唯一键"
+    } ]
+  }, {
+    "name" : "哈希索引",
+    "displayName" : "哈希索引",
+    "type" : "技术",
+    "summary" : "一种索引结构，相比 B+ 树不支持范围查询。",
+    "version" : 1,
+    "sources" : [ "database/mysql-index.md#为什么用 B+ 树" ],
+    "out" : [ {
+      "from" : "哈希索引",
+      "relation" : "不支持",
+      "to" : "范围查询"
+    } ]
+  }, {
+    "name" : "索引排序能力",
+    "displayName" : "索引排序能力",
+    "type" : "概念",
+    "summary" : "联合索引提供的排序能力，范围查询后的列会停止使用。",
+    "version" : 1,
+    "sources" : [ "database/mysql-index.md#最左前缀原则" ],
+    "out" : [ ]
+  }, {
+    "name" : "spring",
+    "displayName" : "Spring",
+    "type" : "技术",
+    "summary" : "文中指出对 prototype 作用域直接抛异常。",
+    "version" : 2,
+    "sources" : [ "spring/circular-dependency.md#什么是循环依赖", "spring/circular-dependency.md#解决不了的情况" ],
+    "out" : [ {
+      "from" : "spring",
+      "relation" : "采用",
+      "to" : "提前曝光"
+    }, {
+      "from" : "spring",
+      "relation" : "抛出",
+      "to" : "异常"
+    } ]
+  }, {
+    "name" : "二级索引",
+    "displayName" : "二级索引",
+    "type" : "概念",
+    "summary" : "可包含查询列并用于判断是否发生回表的索引结构。",
+    "version" : 2,
+    "sources" : [ "database/mysql-index.md#聚簇索引与回表", "database/mysql-index.md#覆盖索引" ],
+    "out" : [ {
+      "from" : "二级索引",
+      "relation" : "具有",
+      "to" : "叶子节点"
+    }, {
+      "from" : "二级索引",
+      "relation" : "在命中且所需列不在索引中时触发",
+      "to" : "回表"
+    } ]
+  }, {
+    "name" : "影响行数",
+    "displayName" : "影响行数",
+    "type" : "概念",
+    "summary" : "更新语句返回的受影响行数，为 0 可说明已处理过。",
+    "version" : 1,
+    "sources" : [ "business-scenarios/idempotency.md#常见方案" ],
+    "out" : [ ]
+  }, {
+    "name" : "库",
+    "displayName" : "库",
+    "type" : "组件",
+    "summary" : "被更新以提供最新数据的数据库。",
+    "version" : 1,
+    "sources" : [ "distributed/redis-cache-consistency.md#为什么是\"先库后删缓存\"" ],
+    "out" : [ ]
+  }, {
+    "name" : "b+ 树",
+    "displayName" : "B+ 树",
+    "type" : "技术",
+    "summary" : "一种矮胖的树结构，千万级数据通常只需 3~4 层，查询消耗少量磁盘 IO。",
+    "version" : 1,
+    "sources" : [ "database/mysql-index.md#为什么用 B+ 树" ],
+    "out" : [ {
+      "from" : "b+ 树",
+      "relation" : "减少",
+      "to" : "磁盘 io"
+    }, {
+      "from" : "b+ 树",
+      "relation" : "包含",
+      "to" : "叶子节点"
+    }, {
+      "from" : "b+ 树",
+      "relation" : "高效支持",
+      "to" : "范围查询"
+    } ]
+  }, {
+    "name" : "字段/setter 注入",
+    "displayName" : "字段/Setter 注入",
+    "type" : "技术",
+    "summary" : "通过字段或 Setter 方法注入依赖的方式。",
+    "version" : 1,
+    "sources" : [ "spring/circular-dependency.md#什么是循环依赖" ],
+    "out" : [ {
+      "from" : "字段/setter 注入",
+      "relation" : "用于",
+      "to" : "bean"
+    } ]
+  }, {
+    "name" : "bean",
+    "displayName" : "Bean",
+    "type" : "组件",
+    "summary" : "不应被全部提前代理的对象。",
+    "version" : 3,
+    "sources" : [ "spring/circular-dependency.md#什么是循环依赖", "spring/circular-dependency.md#三级缓存分别是什么", "spring/circular-dependency.md#为什么需要三级而不是两级" ],
+    "out" : [ ]
+  }, {
+    "name" : "先删后判",
+    "displayName" : "先删后判",
+    "type" : "模式",
+    "summary" : "先执行 DEL 再判断结果的处理顺序。",
+    "version" : 1,
+    "sources" : [ "business-scenarios/idempotency.md#面试常见追问" ],
+    "out" : [ {
+      "from" : "先删后判",
+      "relation" : "先执行",
+      "to" : "del"
+    }, {
+      "from" : "先删后判",
+      "relation" : "后执行",
+      "to" : "判断"
+    } ]
+  }, {
+    "name" : "下单",
+    "displayName" : "下单",
+    "type" : "概念",
+    "summary" : "一种创建订单的写操作。",
+    "version" : 1,
+    "sources" : [ "business-scenarios/idempotency.md#为什么需要幂等" ],
+    "out" : [ {
+      "from" : "下单",
+      "relation" : "属于",
+      "to" : "写操作"
+    } ]
+  }, {
+    "name" : "窗口期",
+    "displayName" : "窗口期",
+    "type" : "概念",
+    "summary" : "先删缓存再更新库期间读请求可能把旧值重新载入缓存的时间段。",
+    "version" : 1,
+    "sources" : [ "distributed/redis-cache-consistency.md#为什么是\"先库后删缓存\"" ],
+    "out" : [ {
+      "from" : "窗口期",
+      "relation" : "允许",
+      "to" : "读请求"
+    } ]
+  }, {
+    "name" : "实例",
+    "displayName" : "实例",
+    "type" : "概念",
+    "summary" : "文中指出在构造器注入的循环依赖中实例都还没创建出来。",
+    "version" : 1,
+    "sources" : [ "spring/circular-dependency.md#解决不了的情况" ],
+    "out" : [ {
+      "from" : "实例",
+      "relation" : "未创建导致无法解决",
+      "to" : "构造器注入的循环依赖"
+    } ]
+  }, {
+    "name" : "异步删缓存",
+    "displayName" : "异步删缓存",
+    "type" : "模式",
+    "summary" : "通过消息队列或订阅 binlog 在后台完成缓存删除的处理模式。",
+    "version" : 1,
+    "sources" : [ "distributed/redis-cache-consistency.md#残留问题与对策" ],
+    "out" : [ {
+      "from" : "异步删缓存",
+      "relation" : "达成",
+      "to" : "最终一致"
+    } ]
+  }, {
+    "name" : "缓存",
+    "displayName" : "缓存",
+    "type" : "组件",
+    "summary" : "可被删除和重新载入以保存数据的数据存储。",
+    "version" : 2,
+    "sources" : [ "distributed/redis-cache-consistency.md#Cache Aside 模式", "distributed/redis-cache-consistency.md#为什么是\"先库后删缓存\"" ],
+    "out" : [ {
+      "from" : "缓存",
+      "relation" : "未命中时触发",
+      "to" : "回填缓存"
+    } ]
+  }, {
+    "name" : "回表次数",
+    "displayName" : "回表次数",
+    "type" : "概念",
+    "summary" : "因索引查询后访问数据行而产生的额外访问次数。",
+    "version" : 1,
+    "sources" : [ "database/mysql-index.md#面试常见追问" ],
+    "out" : [ ]
+  }, {
+    "name" : "并发写",
+    "displayName" : "并发写",
+    "type" : "概念",
+    "summary" : "多个写操作同时发生，使更新缓存容易把旧值写回去的情况。",
+    "version" : 1,
+    "sources" : [ "distributed/redis-cache-consistency.md#Cache Aside 模式" ],
+    "out" : [ {
+      "from" : "并发写",
+      "relation" : "增加风险",
+      "to" : "更新缓存"
+    } ]
+  }, {
+    "name" : "扣库存",
+    "displayName" : "扣库存",
+    "type" : "概念",
+    "summary" : "一种减少库存的写操作。",
+    "version" : 1,
+    "sources" : [ "business-scenarios/idempotency.md#为什么需要幂等" ],
+    "out" : [ {
+      "from" : "扣库存",
+      "relation" : "属于",
+      "to" : "写操作"
+    } ]
+  }, {
+    "name" : "写操作",
+    "displayName" : "写操作",
+    "type" : "概念",
+    "summary" : "会改变系统状态的操作，如转账、下单、扣库存。",
+    "version" : 1,
+    "sources" : [ "business-scenarios/idempotency.md#为什么需要幂等" ],
+    "out" : [ {
+      "from" : "写操作",
+      "relation" : "需要",
+      "to" : "幂等"
+    } ]
+  }, {
+    "name" : "消息队列",
+    "displayName" : "消息队列",
+    "type" : "技术",
+    "summary" : "用于在删除缓存失败时进行重试处理的技术手段。",
+    "version" : 1,
+    "sources" : [ "distributed/redis-cache-consistency.md#残留问题与对策" ],
+    "out" : [ ]
+  }, {
+    "name" : "更新缓存",
+    "displayName" : "更新缓存",
+    "type" : "技术",
+    "summary" : "写操作中未采用的缓存同步方式，并发写时容易把旧值写回去。",
+    "version" : 1,
+    "sources" : [ "distributed/redis-cache-consistency.md#Cache Aside 模式" ],
+    "out" : [ ]
+  }, {
+    "name" : "有序插入",
+    "displayName" : "有序插入",
+    "type" : "模式",
+    "summary" : "按顺序插入数据的操作模式，会使二叉树退化。",
+    "version" : 1,
+    "sources" : [ "database/mysql-index.md#为什么用 B+ 树" ],
+    "out" : [ {
+      "from" : "有序插入",
+      "relation" : "使退化",
+      "to" : "二叉树"
+    } ]
+  }, {
+    "name" : "成品",
+    "displayName" : "成品",
+    "type" : "概念",
+    "summary" : "指初始化完成的对象，应与提前曝光的早期引用区分开。",
+    "version" : 1,
+    "sources" : [ "spring/circular-dependency.md#面试常见追问" ],
+    "out" : [ ]
+  }, {
+    "name" : "getearlybeanreference",
+    "displayName" : "getEarlyBeanReference",
+    "type" : "技术",
+    "summary" : "用于生成代理对象并放入二级缓存的方法。",
+    "version" : 1,
+    "sources" : [ "spring/circular-dependency.md#为什么需要三级而不是两级" ],
+    "out" : [ {
+      "from" : "getearlybeanreference",
+      "relation" : "生成",
+      "to" : "代理对象"
+    }, {
+      "from" : "getearlybeanreference",
+      "relation" : "放入",
+      "to" : "二级缓存"
+    } ]
+  }, {
+    "name" : "强一致",
+    "displayName" : "强一致",
+    "type" : "概念",
+    "summary" : "一种一致性目标，文档中讨论通过串行化读写逼近其可行性。",
+    "version" : 1,
+    "sources" : [ "distributed/redis-cache-consistency.md#面试常见追问" ],
+    "out" : [ ]
+  }, {
+    "name" : "重新载入缓存",
+    "displayName" : "重新载入缓存",
+    "type" : "技术",
+    "summary" : "读请求将旧值写入缓存的过程。",
+    "version" : 1,
+    "sources" : [ "distributed/redis-cache-consistency.md#为什么是\"先库后删缓存\"" ],
+    "out" : [ {
+      "from" : "重新载入缓存",
+      "relation" : "将旧值写入",
+      "to" : "缓存"
+    } ]
+  }, {
+    "name" : "二叉树",
+    "displayName" : "二叉树",
+    "type" : "技术",
+    "summary" : "一种树结构，在有序插入下可能退化成链表。",
+    "version" : 1,
+    "sources" : [ "database/mysql-index.md#为什么用 B+ 树" ],
+    "out" : [ {
+      "from" : "二叉树",
+      "relation" : "退化成",
+      "to" : "链表"
+    } ]
+  }, {
+    "name" : "mq 重复投递",
+    "displayName" : "MQ 重复投递",
+    "type" : "技术",
+    "summary" : "消息队列重复投递消息，可能导致同一请求到达多次。",
+    "version" : 1,
+    "sources" : [ "business-scenarios/idempotency.md#为什么需要幂等" ],
+    "out" : [ {
+      "from" : "mq 重复投递",
+      "relation" : "产生",
+      "to" : "同一请求"
+    } ]
+  }, {
+    "name" : "联合索引",
+    "displayName" : "联合索引",
+    "type" : "概念",
+    "summary" : "由多个列组成、可按查询需求建立的索引。",
+    "version" : 1,
+    "sources" : [ "database/mysql-index.md#覆盖索引" ],
+    "out" : [ ]
+  }, {
+    "name" : "构造器注入",
+    "displayName" : "构造器注入",
+    "type" : "技术",
+    "summary" : "文中指出其循环依赖无法解决，因为实例都还没创建出来。",
+    "version" : 1,
+    "sources" : [ "spring/circular-dependency.md#解决不了的情况" ],
+    "out" : [ {
+      "from" : "构造器注入",
+      "relation" : "导致",
+      "to" : "构造器注入的循环依赖"
+    } ]
+  }, {
+    "name" : "双向链表",
+    "displayName" : "双向链表",
+    "type" : "技术",
+    "summary" : "将 B+ 树叶子节点串联起来的数据结构，用于提升范围查询效率。",
+    "version" : 1,
+    "sources" : [ "database/mysql-index.md#为什么用 B+ 树" ],
+    "out" : [ {
+      "from" : "双向链表",
+      "relation" : "支撑",
+      "to" : "范围查询"
+    } ]
+  }, {
+    "name" : "innodb",
+    "displayName" : "InnoDB",
+    "type" : "组件",
+    "summary" : "文档中提到的数据库存储引擎，其主键索引即聚簇索引。",
+    "version" : 1,
+    "sources" : [ "database/mysql-index.md#聚簇索引与回表" ],
+    "out" : [ {
+      "from" : "innodb",
+      "relation" : "拥有",
+      "to" : "innodb 主键索引"
+    } ]
+  }, {
+    "name" : "业务语义",
+    "displayName" : "业务语义",
+    "type" : "概念",
+    "summary" : "用于定义同一件事唯一键的业务含义。",
+    "version" : 1,
+    "sources" : [ "business-scenarios/idempotency.md#选型思路" ],
+    "out" : [ {
+      "from" : "业务语义",
+      "relation" : "定义",
+      "to" : "唯一键"
+    } ]
+  }, {
+    "name" : "写多读少场景",
+    "displayName" : "写多读少场景",
+    "type" : "概念",
+    "summary" : "写入多于读取的场景，删除缓存可避免不必要的缓存更新浪费。",
+    "version" : 1,
+    "sources" : [ "distributed/redis-cache-consistency.md#Cache Aside 模式" ],
+    "out" : [ ]
+  }, {
+    "name" : "惰性加载",
+    "displayName" : "惰性加载",
+    "type" : "概念",
+    "summary" : "删除缓存后由后续读操作触发重新加载的机制。",
+    "version" : 1,
+    "sources" : [ "distributed/redis-cache-consistency.md#Cache Aside 模式" ],
+    "out" : [ ]
+  }, {
+    "name" : "成品 bean",
+    "displayName" : "成品 Bean",
+    "type" : "概念",
+    "summary" : "完全初始化好的 Bean。",
+    "version" : 1,
+    "sources" : [ "spring/circular-dependency.md#三级缓存分别是什么" ],
+    "out" : [ {
+      "from" : "成品 bean",
+      "relation" : "属于",
+      "to" : "bean"
+    } ]
+  }, {
+    "name" : "代理对象",
+    "displayName" : "代理对象",
+    "type" : "概念",
+    "summary" : "由工厂在必要时通过 getEarlyBeanReference 生成的对象。",
+    "version" : 2,
+    "sources" : [ "spring/circular-dependency.md#三级缓存分别是什么", "spring/circular-dependency.md#为什么需要三级而不是两级" ],
+    "out" : [ ]
+  }, {
+    "name" : "长时间不一致",
+    "displayName" : "长时间不一致",
+    "type" : "概念",
+    "summary" : "缓存与库在较长时间保持不一致的状态。",
+    "version" : 1,
+    "sources" : [ "distributed/redis-cache-consistency.md#为什么是\"先库后删缓存\"" ],
+    "out" : [ ]
+  }, {
+    "name" : "串行化读写",
+    "displayName" : "串行化读写",
+    "type" : "模式",
+    "summary" : "将读写操作按序执行以逼近强一致的访问模式。",
+    "version" : 1,
+    "sources" : [ "distributed/redis-cache-consistency.md#面试常见追问" ],
+    "out" : [ {
+      "from" : "串行化读写",
+      "relation" : "逼近",
+      "to" : "强一致"
+    } ]
+  }, {
+    "name" : "earlysingletonobjects",
+    "displayName" : "earlySingletonObjects",
+    "type" : "组件",
+    "summary" : "二级缓存对应的缓存容器，保存已实例化但未完成属性填充的 Bean。",
+    "version" : 1,
+    "sources" : [ "spring/circular-dependency.md#三级缓存分别是什么" ],
+    "out" : [ {
+      "from" : "earlysingletonobjects",
+      "relation" : "存储",
+      "to" : "半成品 bean"
+    } ]
+  }, {
+    "name" : "唯一键",
+    "displayName" : "唯一键",
+    "type" : "概念",
+    "summary" : "以业务语义定义同一件事的唯一性标识。",
+    "version" : 1,
+    "sources" : [ "business-scenarios/idempotency.md#选型思路" ],
+    "out" : [ ]
+  }, {
+    "name" : "删除缓存失败",
+    "displayName" : "删除缓存失败",
+    "type" : "概念",
+    "summary" : "缓存删除操作未成功导致数据一致性出现残留问题的场景。",
+    "version" : 1,
+    "sources" : [ "distributed/redis-cache-consistency.md#残留问题与对策" ],
+    "out" : [ {
+      "from" : "删除缓存失败",
+      "relation" : "采用重试",
+      "to" : "消息队列"
+    }, {
+      "from" : "删除缓存失败",
+      "relation" : "采用订阅binlog",
+      "to" : "canal"
+    } ]
+  }, {
+    "name" : "singletonobjects",
+    "displayName" : "singletonObjects",
+    "type" : "组件",
+    "summary" : "一级缓存对应的缓存容器，保存完全初始化好的成品 Bean。",
+    "version" : 1,
+    "sources" : [ "spring/circular-dependency.md#三级缓存分别是什么" ],
+    "out" : [ {
+      "from" : "singletonobjects",
+      "relation" : "存储",
+      "to" : "成品 bean"
+    } ]
+  }, {
+    "name" : "聚簇索引",
+    "displayName" : "聚簇索引",
+    "type" : "概念",
+    "summary" : "InnoDB 主键索引对应的索引结构，叶子节点存储整行数据。",
+    "version" : 1,
+    "sources" : [ "database/mysql-index.md#聚簇索引与回表" ],
+    "out" : [ {
+      "from" : "聚簇索引",
+      "relation" : "具有",
+      "to" : "叶子节点"
+    } ]
+  }, {
+    "name" : "数据库",
+    "displayName" : "数据库",
+    "type" : "组件",
+    "summary" : "缓存未命中时读取数据、写操作时先更新的数据源。",
+    "version" : 1,
+    "sources" : [ "distributed/redis-cache-consistency.md#Cache Aside 模式" ],
+    "out" : [ {
+      "from" : "数据库",
+      "relation" : "提供数据",
+      "to" : "回填缓存"
+    } ]
+  }, {
+    "name" : "innodb 主键索引",
+    "displayName" : "InnoDB 主键索引",
+    "type" : "概念",
+    "summary" : "InnoDB 中的主键索引，正文中说明它即聚簇索引。",
+    "version" : 1,
+    "sources" : [ "database/mysql-index.md#聚簇索引与回表" ],
+    "out" : [ {
+      "from" : "innodb 主键索引",
+      "relation" : "即",
+      "to" : "聚簇索引"
+    } ]
+  }, {
+    "name" : "跳过 a 直接查 b",
+    "displayName" : "跳过 a 直接查 b",
+    "type" : "模式",
+    "summary" : "未从 a 开始而直接查询 b 的查询方式。",
+    "version" : 1,
+    "sources" : [ "database/mysql-index.md#最左前缀原则" ],
+    "out" : [ {
+      "from" : "跳过 a 直接查 b",
+      "relation" : "违反",
+      "to" : "最左前缀原则"
+    }, {
+      "from" : "跳过 a 直接查 b",
+      "relation" : "不使用",
+      "to" : "联合索引 (a, b, c)"
+    } ]
+  }, {
+    "name" : "cache aside 模式",
+    "displayName" : "Cache Aside 模式",
+    "type" : "模式",
+    "summary" : "读时先读缓存未命中则读库并回填，写时先更新数据库再删除缓存的缓存模式。",
+    "version" : 1,
+    "sources" : [ "distributed/redis-cache-consistency.md#Cache Aside 模式" ],
+    "out" : [ {
+      "from" : "cache aside 模式",
+      "relation" : "依赖",
+      "to" : "缓存"
+    }, {
+      "from" : "cache aside 模式",
+      "relation" : "依赖",
+      "to" : "数据库"
+    }, {
+      "from" : "cache aside 模式",
+      "relation" : "读时采用",
+      "to" : "回填缓存"
+    }, {
+      "from" : "cache aside 模式",
+      "relation" : "写时先执行",
+      "to" : "更新数据库"
+    }, {
+      "from" : "cache aside 模式",
+      "relation" : "写时后执行",
+      "to" : "删除缓存"
+    }, {
+      "from" : "cache aside 模式",
+      "relation" : "不采用",
+      "to" : "更新缓存"
+    } ]
+  }, {
+    "name" : "不一致窗口",
+    "displayName" : "不一致窗口",
+    "type" : "概念",
+    "summary" : "缓存与库不一致持续的时间范围，先更新库再删缓存时更小。",
+    "version" : 1,
+    "sources" : [ "distributed/redis-cache-consistency.md#为什么是\"先库后删缓存\"" ],
+    "out" : [ ]
+  }, {
+    "name" : "资金或数据错乱",
+    "displayName" : "资金或数据错乱",
+    "type" : "概念",
+    "summary" : "重复请求在写操作未幂等时造成的资金或数据错误。",
+    "version" : 1,
+    "sources" : [ "business-scenarios/idempotency.md#为什么需要幂等" ],
+    "out" : [ ]
+  }, {
+    "name" : "幂等手段",
+    "displayName" : "幂等手段",
+    "type" : "概念",
+    "summary" : "用于保证重复请求不产生重复效果的处理方式。",
+    "version" : 1,
+    "sources" : [ "business-scenarios/idempotency.md#常见方案" ],
+    "out" : [ ]
+  }, {
+    "name" : "原子操作",
+    "displayName" : "原子操作",
+    "type" : "概念",
+    "summary" : "校验+占位合并后不可分割的一次操作。",
+    "version" : 1,
+    "sources" : [ "business-scenarios/idempotency.md#面试常见追问" ],
+    "out" : [ {
+      "from" : "原子操作",
+      "relation" : "避免",
+      "to" : "两个请求都通过校验"
+    } ]
+  }, {
+    "name" : "提前曝光",
+    "displayName" : "提前曝光",
+    "type" : "模式",
+    "summary" : "Spring 用于解决循环依赖的提前曝光机制。",
+    "version" : 1,
+    "sources" : [ "spring/circular-dependency.md#什么是循环依赖" ],
+    "out" : [ {
+      "from" : "提前曝光",
+      "relation" : "解决",
+      "to" : "循环依赖"
+    }, {
+      "from" : "提前曝光",
+      "relation" : "适用于",
+      "to" : "单例 bean"
+    }, {
+      "from" : "提前曝光",
+      "relation" : "适用于",
+      "to" : "字段/setter 注入"
+    } ]
+  }, {
+    "name" : "binlog",
+    "displayName" : "binlog",
+    "type" : "组件",
+    "summary" : "可被订阅以感知数据变更并触发缓存删除的数据库日志组件。",
+    "version" : 1,
+    "sources" : [ "distributed/redis-cache-consistency.md#残留问题与对策" ],
+    "out" : [ ]
+  }, {
+    "name" : "死锁",
+    "displayName" : "死锁",
+    "type" : "概念",
+    "summary" : "创建顺序上的死锁。",
+    "version" : 1,
+    "sources" : [ "spring/circular-dependency.md#什么是循环依赖" ],
+    "out" : [ ]
+  }, {
+    "name" : "一级缓存",
+    "displayName" : "一级缓存",
+    "type" : "概念",
+    "summary" : "只有一级缓存时无法区分半成品与成品，可能将未初始化完成的对象暴露给其他使用者。",
+    "version" : 2,
+    "sources" : [ "spring/circular-dependency.md#三级缓存分别是什么", "spring/circular-dependency.md#面试常见追问" ],
+    "out" : [ {
+      "from" : "一级缓存",
+      "relation" : "对应",
+      "to" : "singletonobjects"
+    }, {
+      "from" : "一级缓存",
+      "relation" : "存储",
+      "to" : "成品 bean"
+    }, {
+      "from" : "一级缓存",
+      "relation" : "可能暴露",
+      "to" : "半成品"
+    }, {
+      "from" : "一级缓存",
+      "relation" : "暴露",
+      "to" : "未初始化完成的对象"
+    }, {
+      "from" : "一级缓存",
+      "relation" : "需要",
+      "to" : "二三级配合"
+    } ]
+  }, {
+    "name" : "构造器注入的循环依赖",
+    "displayName" : "构造器注入的循环依赖",
+    "type" : "概念",
+    "summary" : "文中指无法解决的循环依赖情况，原因是实例都还没创建出来。",
+    "version" : 1,
+    "sources" : [ "spring/circular-dependency.md#解决不了的情况" ],
+    "out" : [ ]
+  }, {
+    "name" : "同一请求",
+    "displayName" : "同一请求",
+    "type" : "概念",
+    "summary" : "由重试、重复点击或重复投递产生的相同请求。",
+    "version" : 1,
+    "sources" : [ "business-scenarios/idempotency.md#为什么需要幂等" ],
+    "out" : [ {
+      "from" : "同一请求",
+      "relation" : "多次执行",
+      "to" : "写操作"
+    }, {
+      "from" : "同一请求",
+      "relation" : "导致",
+      "to" : "资金或数据错乱"
+    } ]
+  }, {
+    "name" : "存储引擎层",
+    "displayName" : "存储引擎层",
+    "type" : "组件",
+    "summary" : "执行索引下推过滤条件的数据库层级。",
+    "version" : 1,
+    "sources" : [ "database/mysql-index.md#面试常见追问" ],
+    "out" : [ ]
+  }, {
+    "name" : "分布式锁",
+    "displayName" : "分布式锁",
+    "type" : "技术",
+    "summary" : "单机锁或 Redis 锁兜底，配合其他方案使用，一般不单独作为幂等手段。",
+    "version" : 2,
+    "sources" : [ "distributed/redis-cache-consistency.md#面试常见追问", "business-scenarios/idempotency.md#常见方案" ],
+    "out" : [ {
+      "from" : "分布式锁",
+      "relation" : "实现",
+      "to" : "串行化读写"
+    }, {
+      "from" : "分布式锁",
+      "relation" : "带来",
+      "to" : "性能代价"
+    }, {
+      "from" : "分布式锁",
+      "relation" : "配合",
+      "to" : "数据库唯一索引"
+    }, {
+      "from" : "分布式锁",
+      "relation" : "配合",
+      "to" : "防重 token"
+    }, {
+      "from" : "分布式锁",
+      "relation" : "配合",
+      "to" : "状态机"
+    }, {
+      "from" : "分布式锁",
+      "relation" : "兜底",
+      "to" : "幂等手段"
+    } ]
+  }, {
+    "name" : "singletonfactories",
+    "displayName" : "singletonFactories",
+    "type" : "组件",
+    "summary" : "三级缓存对应的缓存容器，保存按需生成早期引用的 ObjectFactory 工厂。",
+    "version" : 1,
+    "sources" : [ "spring/circular-dependency.md#三级缓存分别是什么" ],
+    "out" : [ {
+      "from" : "singletonfactories",
+      "relation" : "存储",
+      "to" : "objectfactory"
+    } ]
+  }, {
+    "name" : "缓存场景",
+    "displayName" : "缓存场景",
+    "type" : "概念",
+    "summary" : "文档中讨论一致性策略的典型应用场景。",
+    "version" : 1,
+    "sources" : [ "distributed/redis-cache-consistency.md#面试常见追问" ],
+    "out" : [ {
+      "from" : "缓存场景",
+      "relation" : "追求",
+      "to" : "最终一致"
+    } ]
+  } ]
+}

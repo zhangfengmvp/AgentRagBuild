@@ -1,0 +1,105 @@
+/* Tailwind CSS CDN */
+@import url('https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css');
+
+:root{
+  --primary:#2563EB; --indigo:#4F46E5;
+  --bg:#0F172A; --bg2:#1E293B;
+  --text:#E2E8F0; --muted:#94A3B8;
+  --blue:#2563EB; --amber:#D97706; --green:#16A34A; --indigo:#4F46E5; --red:#DC2626;
+  --glass:rgba(255,255,255,.045); --glass-strong:rgba(255,255,255,.07);
+  --line:rgba(148,163,184,.16);
+  --mono:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;
+  --font:'PingFang SC','Microsoft YaHei',system-ui,-apple-system,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:var(--font); color:var(--text); font-size:14px; line-height:1.65;
+  min-height:100vh;
+  background:
+    radial-gradient(1200px 600px at 12% -8%, rgba(37,99,235,.20), transparent 60%),
+    radial-gradient(900px 500px at 100% 0%, rgba(79,70,229,.18), transparent 55%),
+    linear-gradient(180deg, #0B1120 0%, var(--bg) 40%, #0C1424 100%);
+  background-attachment:fixed;
+}
+.app{max-width:1240px;margin:0 auto;padding:22px 20px 56px}
+
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;
+  background:linear-gradient(120deg, rgba(37,99,235,.92), rgba(79,70,229,.92));
+  color:#fff;border-radius:18px;padding:16px 22px;
+  box-shadow:0 18px 40px rgba(37,99,235,.30), inset 0 1px 0 rgba(255,255,255,.18);backdrop-filter:blur(10px)}
+.brand{display:flex;align-items:center;gap:14px}
+.badge{font-weight:800;font-size:17px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.35);
+  border-radius:12px;padding:8px 12px;letter-spacing:.5px}
+.brand h1{margin:0;font-size:20px;font-weight:700}
+.brand p{margin:2px 0 0;font-size:12px;opacity:.86}
+.topbar nav{display:flex;gap:8px}
+.topbar nav a{color:#fff;text-decoration:none;font-size:13px;opacity:.92;padding:8px 14px;border-radius:11px;
+  border:1px solid rgba(255,255,255,.22);transition:.2s}
+.topbar nav a:hover{background:rgba(255,255,255,.18);transform:translateY(-1px)}
+
+.glass{background:var(--glass);border:1px solid var(--line);border-radius:16px;padding:16px 18px;
+  backdrop-filter:blur(14px);box-shadow:0 10px 30px rgba(2,6,23,.45)}
+
+/* 搜索条 */
+.searchbar{margin-top:18px;display:flex;gap:10px}
+.searchbar input{flex:1;background:rgba(2,6,23,.5);border:1px solid var(--line);border-radius:12px;
+  padding:12px 15px;font-size:14px;color:var(--text);outline:none;transition:.2s}
+.searchbar input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.22)}
+.searchbar .hint{color:var(--muted);font-size:12px;align-self:center;white-space:nowrap}
+
+/* 双栏布局 */
+.layout{display:grid;grid-template-columns:280px 1fr;gap:18px;margin-top:18px}
+@media(max-width:880px){.layout{grid-template-columns:1fr}}
+
+/* 左侧树 */
+.tree h3,.panel h3{margin:0 0 12px;font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px}
+.tree{overflow:auto;max-height:72vh}
+.cat{margin-bottom:6px}
+.cat-head{display:flex;align-items:center;gap:8px;cursor:pointer;padding:8px 10px;border-radius:10px;
+  background:var(--glass-strong);border:1px solid var(--line);transition:.2s}
+.cat-head:hover{transform:translateX(2px)}
+.cat-head .chev{transition:transform .2s;color:var(--muted);font-size:11px}
+.cat.open .chev{transform:rotate(90deg)}
+.cat-count{margin-left:auto;font-size:11px;color:var(--muted)}
+.cat-body{display:none;padding:6px 4px 4px 14px}
+.cat.open .cat-body{display:block}
+.entity{display:block;width:100%;text-align:left;background:transparent;border:0;color:var(--text);
+  font-family:var(--font);font-size:13px;padding:7px 10px;border-radius:9px;cursor:pointer;transition:.18s;
+  border-left:2px solid transparent}
+.entity:hover{background:rgba(37,99,235,.12);border-left-color:var(--primary)}
+.entity.active{background:rgba(37,99,235,.18);border-left-color:var(--primary);color:#fff}
+.entity .etype{font-size:10px;color:var(--muted);margin-left:6px}
+.empty{color:var(--muted);font-size:13px;padding:16px 4px;text-align:center;opacity:.8}
+
+/* 右侧 WikiPage 面板 */
+.panel{overflow:auto;max-height:72vh}
+.page-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.page-title{font-size:22px;font-weight:700}
+.type-badge{font-size:11px;font-weight:600;color:#0B1120;background:var(--amber);border-radius:8px;padding:2px 9px}
+.ver{font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:8px;padding:1px 8px}
+.summary{font-size:14.5px;color:var(--text);margin:10px 0 18px;line-height:1.8}
+.sec-title{font-size:13px;font-weight:600;color:var(--muted);margin:18px 0 10px;
+  display:flex;align-items:center;gap:8px}
+.sec-title::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--primary);box-shadow:0 0 10px var(--primary)}
+
+/* 关系卡片 */
+.rel{display:flex;align-items:center;gap:10px;background:var(--glass-strong);border:1px solid var(--line);
+  border-radius:12px;padding:10px 12px;margin-bottom:8px;transition:.2s}
+.rel:hover{transform:translateY(-1px);border-color:rgba(37,99,235,.5);box-shadow:0 0 16px rgba(37,99,235,.18)}
+.rel .node{color:#fff;font-weight:600;background:rgba(37,99,235,.16);border:1px solid rgba(37,99,235,.4);
+  border-radius:9px;padding:4px 10px;cursor:pointer;transition:.18s}
+.rel .node:hover{background:rgba(37,99,235,.3)}
+.rel .arrow{color:var(--amber);font-weight:700}
+.rel .verb{color:var(--indigo);font-weight:600;font-size:13px}
+.sources{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.sources li{font-size:12.5px;color:var(--muted);background:rgba(2,6,23,.4);border:1px solid var(--line);
+  border-radius:9px;padding:7px 10px;font-family:var(--mono)}
+
+.footer{margin-top:22px;color:var(--muted);font-size:12px;display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center}
+.footer a{color:#93C5FD;text-decoration:none}
+.footer a:hover{text-decoration:underline}
+.footer code{font-family:var(--mono);background:rgba(37,99,235,.12);padding:1px 6px;border-radius:6px;color:#93C5FD}
+
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.fade{animation:fade .35s ease both}

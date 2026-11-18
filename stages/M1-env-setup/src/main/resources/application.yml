@@ -1,0 +1,31 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: m1-env-setup
+  thymeleaf:
+    cache: false
+  # 百炼 DashScope 配置（从环境变量读取，勿在文件中硬编码 Key）
+  ai:
+    dashscope:
+      api-key: ${DASHSCOPE_API_KEY:}
+      # 后续阶段使用的模型（M2 起生效）
+      embedding:
+        options:
+          model: text-embedding-v3
+      chat:
+        options:
+          model: qwen-plus
+
+# 本地 Qdrant 连接信息（M2 起由 spring-ai-qdrant-store 使用）
+qdrant:
+  host: localhost
+  port: 6333
+  collection: java_knowledge
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

@@ -1,0 +1,23 @@
+# Maven 构建产物
+**/target/
+
+# IDE / 编辑器 / 系统文件
+.idea/
+*.iml
+.vscode/
+.DS_Store
+
+# CodeBuddy 本地项目数据（本地保留，不纳入版本库）
+.codebuddy/
+
+# Python 缓存
+__pycache__/
+*.py[cod]
+
+# 日志 / 临时文件
+*.log
+*.tmp
+
+# 本地环境变量 / 密钥文件（API Key 仅通过环境变量注入）
+.env
+.env.*

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>M7 · LLM Wiki 知识库</title>
+  <link rel="stylesheet" href="/css/wiki.css">
+</head>
+<body>
+  <div class="app">
+    <!-- 顶栏 -->
+    <header class="topbar">
+      <div class="brand">
+        <span class="badge">M7</span>
+        <div>
+          <h1>Agent 编排 · LLM Wiki 知识库</h1>
+          <p>实体/关系抽取 → 知识图谱 → 增量修订 → 浏览式 Wiki（结构化 · 互链 · 可演进）</p>
+        </div>
+      </div>
+      <nav>
+        <a href="/">门户</a>
+        <a href="/stream-agent">流式问答</a>
+        <a href="/wiki">Wiki</a>
+        <a href="/status">状态</a>
+        <a href="/api/metrics/cost">成本</a>
+      </nav>
+    </header>
+
+    <!-- 搜索条 -->
+    <div class="searchbar">
+      <input id="search" type="text" placeholder="搜索实体或关键词，如：循环依赖 / IoC / 分布式事务" autocomplete="off" />
+      <span class="hint">回车搜索 · 点击左侧实体查看 WikiPage</span>
+    </div>
+
+    <!-- 双栏：左树 / 右页 -->
+    <div class="layout">
+      <aside class="glass tree">
+        <h3>📚 知识库分类树</h3>
+        <div id="tree"><div class="empty">先运行 <code>POST /api/ingest</code> 构建知识图谱，再刷新本页。</div></div>
+      </aside>
+
+      <main class="glass panel" id="panel">
+        <div class="empty">从左侧选择实体，或搜索后点击结果，查看其 WikiPage（摘要 / 关系 / 溯源）。</div>
+      </main>
+    </div>
+
+    <footer class="footer">
+      <span>图谱持久化于 <code>wiki/kg.json</code>，重入库自动增量修订（关系合并、来源追加、版本自增）。</span>
+      <span style="margin-left:auto">看指标：<a href="/actuator/prometheus">/actuator/prometheus</a> · 看成本：<a href="/api/metrics/cost">/api/metrics/cost</a></span>
+    </footer>
+  </div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    let current = null;
+
+    function esc(s) {
+      return (s == null ? '' : String(s))
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function loadTree() {
+      fetch('/api/wiki/tree').then(r => r.json()).then(renderTree).catch(() => {
+        $('tree').innerHTML = '<div class="empty">图谱为空或尚未构建，请先 POST /api/ingest。</div>';
+      });
+    }
+
+    function renderTree(tree) {
+      const root = $('tree');
+      root.innerHTML = '';
+      const cats = Object.keys(tree);
+      if (!cats.length) {
+        root.innerHTML = '<div class="empty">图谱为空，请先 POST /api/ingest 构建知识库。</div>';
+        return;
+      }
+      cats.forEach(cat => {
+        const wrap = document.createElement('div');
+        wrap.className = 'cat open';
+        const head = document.createElement('div');
+        head.className = 'cat-head';
+        head.innerHTML = '<span class="chev">▶</span><b>' + esc(cat) + '</b>'
+          + '<span class="cat-count">' + tree[cat].length + '</span>';
+        const body = document.createElement('div');
+        body.className = 'cat-body';
+        tree[cat].forEach(e => {
+          const btn = document.createElement('button');
+          btn.className = 'entity';
+          btn.dataset.name = e.displayName;
+          btn.innerHTML = esc(e.displayName) + '<span class="etype">' + esc(e.type || '') + '</span>';
+          btn.onclick = () => openEntity(e.displayName, btn);
+          body.appendChild(btn);
+        });
+        head.onclick = () => wrap.classList.toggle('open');
+        wrap.appendChild(head);
+        wrap.appendChild(body);
+        root.appendChild(wrap);
+      });
+    }
+
+    function openEntity(name, btn) {
+      if (btn) {
+        document.querySelectorAll('.entity.active').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      }
+      current = name;
+      fetch('/api/wiki/page?name=' + encodeURIComponent(name))
+        .then(r => r.json())
+        .then(renderPage)
+        .catch(() => { $('panel').innerHTML = '<div class="empty">加载失败。</div>'; });
+    }
+
+    function relCard(from, rel, to, dir) {
+      // dir: 'out' from→rel→to ; 'in' to←rel←from（显示为 源 → rel → 本实体）
+      const wrap = document.createElement('div');
+      wrap.className = 'rel fade';
+      const left = dir === 'out' ? from : to;
+      const right = dir === 'out' ? to : from;
+      wrap.innerHTML = '<span class="node" data-name="' + esc(left) + '">' + esc(left)
+        + '</span><span class="arrow">—</span><span class="verb">' + esc(rel)
+        + '</span><span class="arrow">→</span><span class="node" data-name="' + esc(right) + '">' + esc(right) + '</span>';
+      wrap.querySelectorAll('.node').forEach(n => {
+        n.onclick = () => openEntity(n.dataset.name);
+      });
+      return wrap;
+    }
+
+    function renderPage(p) {
+      const el = $('panel');
+      if (!p || !p.name) {
+        el.innerHTML = '<div class="empty">未找到该实体。</div>';
+        return;
+      }
+      el.innerHTML = '';
+      const head = document.createElement('div');
+      head.className = 'page-head fade';
+      head.innerHTML = '<span class="page-title">' + esc(p.displayName || p.name) + '</span>'
+        + (p.type ? '<span class="type-badge">' + esc(p.type) + '</span>' : '')
+        + '<span class="ver">v' + (p.version || 1) + '</span>';
+      el.appendChild(head);
+
+      const sum = document.createElement('div');
+      sum.className = 'summary fade';
+      sum.textContent = p.summary || '（暂无摘要）';
+      el.appendChild(sum);
+
+      el.appendChild(sectionTitle('出边关系（本实体指向其他）'));
+      const outWrap = document.createElement('div');
+      (p.out || []).forEach(r => outWrap.appendChild(relCard(p.displayName || p.name, r.relation, r.to, 'out')));
+      if (!(p.out && p.out.length)) outWrap.innerHTML = '<div class="empty">无</div>';
+      el.appendChild(outWrap);
+
+      el.appendChild(sectionTitle('入边关系（其他指向本实体）'));
+      const inWrap = document.createElement('div');
+      (p.in || []).forEach(r => inWrap.appendChild(relCard(r.from, r.relation, p.displayName || p.name, 'in')));
+      if (!(p.in && p.in.length)) inWrap.innerHTML = '<div class="empty">无</div>';
+      el.appendChild(inWrap);
+
+      el.appendChild(sectionTitle('来源溯源'));
+      const ul = document.createElement('ul');
+      ul.className = 'sources';
+      (p.sources || []).forEach(s => {
+        const li = document.createElement('li');
+        li.textContent = s;
+        ul.appendChild(li);
+      });
+      if (!(p.sources && p.sources.length)) ul.innerHTML = '<div class="empty">无</div>';
+      el.appendChild(ul);
+    }
+
+    function sectionTitle(t) {
+      const d = document.createElement('div');
+      d.className = 'sec-title';
+      d.textContent = t;
+      return d;
+    }
+
+    $('search').addEventListener('keydown', e => {
+      if (e.key !== 'Enter') return;
+      const q = e.target.value.trim();
+      if (!q) return;
+      fetch('/api/wiki/search?q=' + encodeURIComponent(q))
+        .then(r => r.json()).then(list => {
+          const root = $('tree');
+          root.innerHTML = '';
+          if (!list.length) { root.innerHTML = '<div class="empty">无匹配实体。</div>'; return; }
+          const wrap = document.createElement('div');
+          wrap.className = 'cat open';
+          const head = document.createElement('div');
+          head.className = 'cat-head';
+          head.innerHTML = '<span class="chev">▶</span><b>搜索：' + esc(q) + '</b><span class="cat-count">' + list.length + '</span>';
+          const body = document.createElement('div');
+          body.className = 'cat-body';
+          list.forEach(x => {
+            const b = document.createElement('button');
+            b.className = 'entity';
+            b.dataset.name = x.displayName;
+            b.innerHTML = esc(x.displayName) + '<span class="etype">' + esc(x.type || '') + '</span>';
+            b.onclick = () => openEntity(x.displayName, b);
+            body.appendChild(b);
+          });
+          head.onclick = () => wrap.classList.toggle('open');
+          wrap.appendChild(head); wrap.appendChild(body); root.appendChild(wrap);
+        }).catch(() => {});
+    });
+
+    loadTree();
+  </script>
+</body>
+</html>

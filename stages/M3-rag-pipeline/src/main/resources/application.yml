@@ -1,0 +1,59 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: m3-rag-pipeline
+  thymeleaf:
+    cache: false
+  ai:
+    dashscope:
+      api-key: ${DASHSCOPE_API_KEY:}
+      # embedding 走百炼【原生 API】（已 curl 验证 qwen3.7-text-embedding-flash 在网关根地址原生端点可用）。
+      # chat 不走这里——本工作空间的 chat 模型只暴露在 OpenAI 兼容端点，见下方 spring.ai.openai。
+      base-url: https://ws-garuvggx9tyw15t4.cn-beijing.maas.aliyuncs.com
+      embedding:
+        options:
+          model: qwen3.7-text-embedding-flash
+    openai:
+      # 百炼 OpenAI 兼容端点：工作空间 chat 模型（qwen3.8-27b 等）仅在此可用，原生接口不认。
+      # 注意：base-url 只需到 /compatible-mode 即可——Spring AI 的 OpenAiApi 会自己再拼 /v1/chat/completions
+      # （已反编译确认 completionsPath 默认 = /v1/chat/completions）。若这里写成 /compatible-mode/v1，
+      # 最终会变成 .../compatible-mode/v1/v1/chat/completions → 404。
+      base-url: https://ws-garuvggx9tyw15t4.cn-beijing.maas.aliyuncs.com/compatible-mode
+      api-key: ${DASHSCOPE_API_KEY:}
+      chat:
+        options:
+          model: qwen3.8-27b
+    vectorstore:
+      qdrant:
+        host: localhost
+        port: 6334          # gRPC 端口（Spring AI 的 Qdrant 客户端走 gRPC/HTTP2）
+        collection-name: java_knowledge_m3
+        # 关闭启动期自动建表：改为入库时按需创建（维度取自当前 embedding 模型）。
+        initialize-schema: false
+
+# RAG 管道参数（M3 在 M2 基础上新增混合检索 / 改写 / 重排的可配项）
+rag:
+  corpus-dir: corpus      # 相对运行目录（IDEA 默认 = 本 stage 根目录）
+  qdrant-rest-port: 6333  # 仅用于 /status 状态页探活（REST）；应用连库走 gRPC 6334
+  top-k: 6                # 每路召回深度；同时作为送入生成的候选数
+  similarity-threshold: 0.30   # 稠密检索的余弦相似度阈值（混合检索下可放宽，交由重排精排）
+  rrf-k: 60               # RRF 融合常数 k（默认 60，值越大越压低低排名贡献）
+  rerank-top-n: 10        # 仅对融合后的前 N 条做重排（控制成本）
+  query-rewrite-enabled: true   # 是否启用 LLM Query 改写
+  sparse-enabled: true         # 是否启用本地 BM25 稀疏检索（关闭则退化为纯稠密）
+  chunk:
+    max-chars: 800        # 单切片最大字符数
+    overlap: 120          # 相邻切片重叠字符数
+  # 百炼 rerank 端点（qwen3.7-text-rerank 在工作空间网关原生接口，见 Reranker）
+  # 端点路径固定为 /api/v1/services/rerank/text-rerank/text-rerank（用户空间网关根地址 + 该路径）
+  rerank:
+    url: https://ws-garuvggx9tyw15t4.cn-beijing.maas.aliyuncs.com/api/v1/services/rerank/text-rerank/text-rerank
+    api-key: ${DASHSCOPE_API_KEY:}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
